@@ -24,3 +24,11 @@ naming:
     active: true
     excludes: ['**/test/**', '**/*Test.kt', '**/*Preview*']
     ignoreAnnotated: ['Composable', 'Preview']
+
+style:
+  # tailwind-modifiers/tailwind-core are literally tables of Tailwind's own
+  # numeric scale values (spacing dp, opacity %, aspect ratios, OKLCH components)
+  # — the numbers ARE the content, not magic constants standing in for meaning.
+  MagicNumber:
+    active: true
+    excludes: ['**/tailwind-modifiers/**', '**/tailwind-core/**']
