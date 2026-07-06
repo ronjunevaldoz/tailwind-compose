@@ -12,15 +12,12 @@ complexity:
   CyclomaticComplexMethod:
     active: true
     threshold: 15
-  # Utility-scale files (spacing/color/typography extensions) are intentionally
-  # code-generated with many small one-line functions per file.
+  # tailwind-modifiers is code-generated utility-scale functions (spacing, sizing,
+  # color, typography, border extensions) — hundreds of one-line functions per file
+  # by design, not a code smell. Excluded from the function-count check entirely.
   TooManyFunctions:
     active: true
-    thresholdInFiles: 300
-    thresholdInClasses: 300
-    thresholdInInterfaces: 300
-    thresholdInObjects: 300
-    thresholdInEnums: 300
+    excludes: ['**/tailwind-modifiers/**']
 
 naming:
   FunctionNaming:
