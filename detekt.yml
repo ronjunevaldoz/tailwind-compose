@@ -22,7 +22,7 @@ complexity:
 naming:
   FunctionNaming:
     active: true
-    excludes: ['**/test/**', '**/*Test.kt', '**/*Preview*']
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Preview*', '**/build/**']
     ignoreAnnotated: ['Composable', 'Preview']
 
 style:
@@ -31,4 +31,12 @@ style:
   # — the numbers ARE the content, not magic constants standing in for meaning.
   MagicNumber:
     active: true
-    excludes: ['**/tailwind-modifiers/**', '**/tailwind-core/**']
+    excludes: ['**/tailwind-modifiers/**', '**/tailwind-core/**', '**/build/**']
+  # @Preview-annotated composables are invoked by Android Studio/preview tooling,
+  # not by our own code, so Detekt can't see the call site.
+  UnusedPrivateMember:
+    active: true
+    ignoreAnnotated: ['Preview']
+  MaxLineLength:
+    active: true
+    excludes: ['**/build/**']

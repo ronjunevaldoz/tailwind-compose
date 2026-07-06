@@ -9,6 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import io.github.ronjunevaldoz.tailwind.core.TwSpacing
 
+/**
+ * Tailwind's `p*`/`m*`/`gap*` spacing utilities as Modifier and Arrangement
+ * extensions over [TwSpacing]'s full scale. See the README's "Modifier order
+ * matters" section — these are ordinary padding and must come *after*
+ * `bg*()`/`rounded*()` in a chain to be visible.
+ */
 fun Modifier.p0(): Modifier = this.padding(TwSpacing.scale0)
 
 fun Modifier.pPx(): Modifier = this.padding(TwSpacing.scalePx)

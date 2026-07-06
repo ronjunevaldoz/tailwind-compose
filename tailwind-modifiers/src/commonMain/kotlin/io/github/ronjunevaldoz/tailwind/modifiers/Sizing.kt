@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.Modifier
 import io.github.ronjunevaldoz.tailwind.core.TwSpacing
 
+/** Tailwind's `w-*`/`h-*`/`size-*` sizing utilities over [TwSpacing]'s scale. */
 fun Modifier.w0(): Modifier = this.width(TwSpacing.scale0)
 
 fun Modifier.wPx(): Modifier = this.width(TwSpacing.scalePx)

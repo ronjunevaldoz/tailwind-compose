@@ -66,6 +66,7 @@ def generate() -> str:
         "import androidx.compose.foundation.layout.widthIn",
         "import androidx.compose.ui.Modifier",
         "import io.github.ronjunevaldoz.tailwind.core.TwSpacing\n",
+        "/** Tailwind's `w-*`/`h-*`/`size-*` sizing utilities over [TwSpacing]'s scale. */",
     ]
     body = generate_scaled() + generate_fixed()
     return "\n".join(header + body) + "\n"

@@ -37,12 +37,12 @@ allprojects {
         allRules = false
     }
 
-    dependencies {
-        // NOTE: version catalog ("libs") type-safe accessors are generated per build script
-        // and are not resolvable from inside an allprojects {} closure, so this is pinned
-        // directly. Keep in sync with the `detekt` version in gradle/libs.versions.toml.
-        add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
-    }
+    // NOTE: no detekt-formatting plugin — Ktlint is this project's single source of
+    // truth for formatting. Adding detekt-formatting on top double-covers the same
+    // concern with an independently-versioned embedded ktlint, which disagreed with
+    // our actual ktlint plugin version and also flamed out on Compose-Resources-generated
+    // sources under build/ (which aren't excludable from that ruleset per-task — see
+    // detekt.yml's per-rule excludes for the non-formatting rules that DO need them).
 
     tasks.withType<AbstractTestTask>().configureEach {
         testLogging {

@@ -137,6 +137,12 @@ def generate() -> str:
         "import androidx.compose.foundation.layout.padding",
         "import androidx.compose.ui.Modifier",
         "import io.github.ronjunevaldoz.tailwind.core.TwSpacing\n",
+        "/**",
+        " * Tailwind's `p*`/`m*`/`gap*` spacing utilities as Modifier and Arrangement",
+        " * extensions over [TwSpacing]'s full scale. See the README's \"Modifier order",
+        " * matters\" section — these are ordinary padding and must come *after*",
+        " * `bg*()`/`rounded*()` in a chain to be visible.",
+        " */",
     ]
     body = (
         generate_padding()
