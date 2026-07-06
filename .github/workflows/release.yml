@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+
+  # ─── Build library artifacts ────────────────────────────────────────────────
+  build:
+    name: Build release artifacts
+    runs-on: macos-latest # macOS runner needed to build iOS klib/framework outputs
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Build all publishable modules
+        run: ./gradlew :tailwind-core:build :tailwind-modifiers:build :tailwind-compose:build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tailwind-compose-${{ github.ref_name }}
+          path: |
+            tailwind-core/build/outputs/
+            tailwind-modifiers/build/outputs/
+            tailwind-compose/build/outputs/
+          retention-days: 30
+
+  # ─── Publish to Maven Central ───────────────────────────────────────────────
+  # Requires these repo secrets (Settings → Secrets and variables → Actions):
+  #   MAVEN_CENTRAL_USERNAME / MAVEN_CENTRAL_PASSWORD — Central Portal user token
+  #   SIGNING_IN_MEMORY_KEY / SIGNING_IN_MEMORY_KEY_PASSWORD — ASCII-armored GPG
+  #     private key (`gpg --armor --export-secret-keys KEY_ID`) and its passphrase
+  publish:
+    name: Publish to Maven Central
+    runs-on: macos-latest # macOS runner needed to build iOS klib outputs before publishing
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-SNAPSHOT')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Publish and release tailwind-core
+        run: ./gradlew :tailwind-core:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
+
+      - name: Publish and release tailwind-modifiers
+        run: ./gradlew :tailwind-modifiers:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
+
+      - name: Publish and release tailwind-compose
+        run: ./gradlew :tailwind-compose:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}

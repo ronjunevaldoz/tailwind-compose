@@ -1,0 +1,29 @@
+build:
+  maxIssues: 0
+
+complexity:
+  LongMethod:
+    active: true
+    threshold: 60
+  LongParameterList:
+    active: true
+    functionThreshold: 8
+    constructorThreshold: 8
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 15
+  # Utility-scale files (spacing/color/typography extensions) are intentionally
+  # code-generated with many small one-line functions per file.
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 300
+    thresholdInClasses: 300
+    thresholdInInterfaces: 300
+    thresholdInObjects: 300
+    thresholdInEnums: 300
+
+naming:
+  FunctionNaming:
+    active: true
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Preview*']
+    ignoreAnnotated: ['Composable', 'Preview']
