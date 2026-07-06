@@ -18,3 +18,6 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 __pycache__/
+
+# Vendored agent skill docs — regenerate via /kmm-update-skills
+.claude/skills/
