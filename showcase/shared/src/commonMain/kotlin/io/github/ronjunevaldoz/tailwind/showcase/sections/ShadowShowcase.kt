@@ -18,7 +18,18 @@ import io.github.ronjunevaldoz.tailwind.modifiers.shadowXl
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun ShadowShowcase() {
-    ShowcaseSection(title = "Shadow — shadowSm, shadowMd, shadowLg, shadowXl") {
+    ShowcaseSection(
+        title = "Shadow — shadowSm, shadowMd, shadowLg, shadowXl",
+        code =
+            """
+            Row(horizontalArrangement = gap4(), modifier = Modifier.padding(16.dp)) {
+                listOf(Modifier.shadowSm(), Modifier.shadowMd(), Modifier.shadowLg(), Modifier.shadowXl())
+                    .forEach { shadow ->
+                        Box(shadow.size(40.dp).bgWhite())
+                    }
+            }
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap4(), modifier = Modifier.padding(16.dp)) {
             listOf(Modifier.shadowSm(), Modifier.shadowMd(), Modifier.shadowLg(), Modifier.shadowXl())
                 .forEach { shadow ->

@@ -14,7 +14,16 @@ import io.github.ronjunevaldoz.tailwind.modifiers.textXl3
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun TypographyShowcase() {
-    ShowcaseSection(title = "Typography — textSm, textXl, textXl2, textXl3") {
+    ShowcaseSection(
+        title = "Typography — textSm, textXl, textXl2, textXl3",
+        code =
+            """
+            Text("The quick brown fox", style = MaterialTheme.typography.bodyLarge.textSm())
+            Text("The quick brown fox", style = MaterialTheme.typography.bodyLarge.textXl())
+            Text("The quick brown fox", style = MaterialTheme.typography.bodyLarge.textXl2())
+            Text("The quick brown fox", style = MaterialTheme.typography.bodyLarge.textXl3().fontBold())
+            """.trimIndent(),
+    ) {
         Column {
             Text("The quick brown fox", style = MaterialTheme.typography.bodyLarge.textSm())
             Text("The quick brown fox", style = MaterialTheme.typography.bodyLarge.textXl())

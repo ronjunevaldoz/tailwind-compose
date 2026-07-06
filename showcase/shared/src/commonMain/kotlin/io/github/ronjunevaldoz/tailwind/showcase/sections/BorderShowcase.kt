@@ -18,7 +18,18 @@ import io.github.ronjunevaldoz.tailwind.modifiers.roundedNone
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun BorderShowcase() {
-    ShowcaseSection(title = "Borders — roundedNone, rounded, roundedLg, roundedFull") {
+    ShowcaseSection(
+        title = "Borders — roundedNone, rounded, roundedLg, roundedFull",
+        code =
+            """
+            Row(horizontalArrangement = gap4()) {
+                listOf(Modifier.roundedNone(), Modifier.rounded(), Modifier.roundedLg(), Modifier.roundedFull())
+                    .forEach { shape ->
+                        Box(shape.size(40.dp).border4(TwColors.blue500))
+                    }
+            }
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap4()) {
             listOf(Modifier.roundedNone(), Modifier.rounded(), Modifier.roundedLg(), Modifier.roundedFull())
                 .forEach { shape ->

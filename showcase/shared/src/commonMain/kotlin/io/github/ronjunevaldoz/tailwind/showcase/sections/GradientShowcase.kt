@@ -16,7 +16,14 @@ import io.github.ronjunevaldoz.tailwind.modifiers.gap4
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun GradientShowcase() {
-    ShowcaseSection(title = "Gradients — bgGradientToR, bgGradientToB") {
+    ShowcaseSection(
+        title = "Gradients — bgGradientToR, bgGradientToB",
+        code =
+            """
+            Box(Modifier.size(80.dp).background(bgGradientToR(listOf(TwColors.blue500, TwColors.purple500))))
+            Box(Modifier.size(80.dp).background(bgGradientToB(listOf(TwColors.pink500, TwColors.amber500))))
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap4()) {
             Box(
                 Modifier

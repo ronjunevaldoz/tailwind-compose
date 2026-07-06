@@ -15,7 +15,16 @@ import io.github.ronjunevaldoz.tailwind.modifiers.gap4
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun AspectRatioShowcase() {
-    ShowcaseSection(title = "Aspect ratio — aspectSquare, aspectVideo") {
+    ShowcaseSection(
+        title = "Aspect ratio — aspectSquare, aspectVideo",
+        code =
+            """
+            Row(horizontalArrangement = gap4()) {
+                Box(Modifier.width(48.dp).aspectSquare().bgBlue500())
+                Box(Modifier.width(96.dp).aspectVideo().bgBlue500())
+            }
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap4()) {
             Box(Modifier.width(48.dp).aspectSquare().bgBlue500())
             Box(Modifier.width(96.dp).aspectVideo().bgBlue500())

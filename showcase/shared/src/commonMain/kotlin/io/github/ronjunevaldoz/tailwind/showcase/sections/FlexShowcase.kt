@@ -18,7 +18,21 @@ import io.github.ronjunevaldoz.tailwind.modifiers.justifyEnd
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun FlexShowcase() {
-    ShowcaseSection(title = "Flex — justifyCenter, justifyEnd, justifyBetween") {
+    ShowcaseSection(
+        title = "Flex — justifyCenter, justifyEnd, justifyBetween",
+        code =
+            """
+            listOf(justifyCenter(), justifyEnd(), justifyBetween()).forEach { arrangement ->
+                Row(
+                    modifier = Modifier.width(200.dp).height(24.dp).bgSlate200(),
+                    horizontalArrangement = arrangement,
+                ) {
+                    Box(Modifier.size(20.dp).bgBlue500())
+                    Box(Modifier.size(20.dp).bgBlue500())
+                }
+            }
+            """.trimIndent(),
+    ) {
         listOf(
             "justifyCenter" to justifyCenter(),
             "justifyEnd" to justifyEnd(),

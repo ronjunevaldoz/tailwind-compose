@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,12 +19,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate100
-import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate200
+import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate50
+import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate900
 import io.github.ronjunevaldoz.tailwind.modifiers.bgWhite
-import io.github.ronjunevaldoz.tailwind.modifiers.p2
+import io.github.ronjunevaldoz.tailwind.modifiers.fontBold
+import io.github.ronjunevaldoz.tailwind.modifiers.gap1
+import io.github.ronjunevaldoz.tailwind.modifiers.gap6
+import io.github.ronjunevaldoz.tailwind.modifiers.p4
+import io.github.ronjunevaldoz.tailwind.modifiers.p6
+import io.github.ronjunevaldoz.tailwind.modifiers.px3
+import io.github.ronjunevaldoz.tailwind.modifiers.py2
+import io.github.ronjunevaldoz.tailwind.modifiers.roundedMd
+import io.github.ronjunevaldoz.tailwind.modifiers.textLg
+import io.github.ronjunevaldoz.tailwind.modifiers.textSm
+import io.github.ronjunevaldoz.tailwind.modifiers.textWhite
 import io.github.ronjunevaldoz.tailwind.showcase.sections.AspectRatioShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.BorderShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.CascadeLayersExplainer
@@ -45,6 +57,9 @@ import io.github.ronjunevaldoz.tailwind.showcase.sections.Transform3DShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.TransitionShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.TypographyShowcase
 
+/** Test tag for the sidebar's LazyColumn, so tests can scroll off-screen items into view. */
+internal const val SIDEBAR_LIST_TEST_TAG = "sidebar-list"
+
 /** Sidebar + detail-view scaffold — one category per screen, built entirely from the library's own Modifiers. */
 @Suppress("ktlint:standard:function-naming")
 @Composable
@@ -53,7 +68,15 @@ fun App() {
         var selected by remember { mutableStateOf(ShowcaseCategory.Spacing) }
         Row(modifier = Modifier.bgWhite().fillMaxSize()) {
             Sidebar(selected = selected, onSelect = { selected = it })
-            Column(modifier = Modifier.fillMaxHeight().verticalScroll(rememberScrollState())) {
+            Column(
+                modifier =
+                    Modifier
+                        .bgSlate50()
+                        .fillMaxHeight()
+                        .verticalScroll(rememberScrollState())
+                        .p6(),
+                verticalArrangement = gap6(),
+            ) {
                 CategoryDetail(selected)
             }
         }
@@ -66,18 +89,37 @@ private fun Sidebar(
     selected: ShowcaseCategory,
     onSelect: (ShowcaseCategory) -> Unit,
 ) {
-    LazyColumn(modifier = Modifier.width(180.dp).fillMaxHeight().bgSlate100()) {
-        items(ShowcaseCategory.entries.toList()) { category ->
-            val isSelected = category == selected
-            Text(
-                category.title,
-                modifier =
-                    Modifier
-                        .let { if (isSelected) it.bgSlate200() else it }
-                        .clickable { onSelect(category) }
-                        .fillMaxHeight()
-                        .p2(),
-            )
+    Column(modifier = Modifier.width(200.dp).fillMaxHeight().bgWhite()) {
+        Text(
+            "tailwind-compose",
+            style =
+                MaterialTheme.typography.bodyLarge
+                    .textLg()
+                    .fontBold(),
+            modifier = Modifier.p4(),
+        )
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth().fillMaxHeight().testTag(SIDEBAR_LIST_TEST_TAG),
+            verticalArrangement = gap1(),
+        ) {
+            items(ShowcaseCategory.entries.toList()) { category ->
+                val isSelected = category == selected
+                Text(
+                    category.title,
+                    style =
+                        MaterialTheme.typography.bodyMedium
+                            .textSm()
+                            .let { if (isSelected) it.fontBold().textWhite() else it },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .let { if (isSelected) it.bgSlate900() else it }
+                            .roundedMd()
+                            .clickable { onSelect(category) }
+                            .px3()
+                            .py2(),
+                )
+            }
         }
     }
 }

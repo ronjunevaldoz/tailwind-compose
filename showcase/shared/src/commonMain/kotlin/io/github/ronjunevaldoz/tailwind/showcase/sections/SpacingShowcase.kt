@@ -22,7 +22,19 @@ import io.github.ronjunevaldoz.tailwind.modifiers.p8
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun SpacingShowcase() {
-    ShowcaseSection(title = "Spacing — p1, p2, p4, p8") {
+    ShowcaseSection(
+        title = "Spacing — p1, p2, p4, p8",
+        code =
+            """
+            Row(horizontalArrangement = gap4()) {
+                listOf(Modifier.p1(), Modifier.p2(), Modifier.p4(), Modifier.p8()).forEach { padding ->
+                    Box(Modifier.bgSlate200().then(padding)) {
+                        Box(Modifier.size(16.dp).bgBlue500())
+                    }
+                }
+            }
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap4()) {
             listOf(Modifier.p1(), Modifier.p2(), Modifier.p4(), Modifier.p8()).forEach { padding ->
                 Box(Modifier.bgSlate200().then(padding)) {

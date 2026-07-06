@@ -66,12 +66,34 @@ private val everyHueAt500 =
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun ColorShowcase() {
-    ShowcaseSection(title = "Color — blue-50 through blue-950") {
+    ShowcaseSection(
+        title = "Color — blue-50 through blue-950",
+        code =
+            """
+            val blueRamp = listOf(TwColors.blue50, TwColors.blue100, /* ... */ TwColors.blue950)
+            Row(horizontalArrangement = gap1()) {
+                blueRamp.forEach { color -> Box(Modifier.size(24.dp).background(color)) }
+            }
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap1()) {
             blueRamp.forEach { color -> Box(Modifier.size(24.dp).background(color)) }
         }
     }
-    ShowcaseSection(title = "Color — every hue at shade 500") {
+    ShowcaseSection(
+        title = "Color — every hue at shade 500",
+        code =
+            """
+            val everyHueAt500 = listOf(TwColors.slate500, TwColors.red500, /* ... */ TwColors.rose500)
+            Column {
+                everyHueAt500.chunked(9).forEach { rowColors ->
+                    Row(horizontalArrangement = gap4()) {
+                        rowColors.forEach { color -> Box(Modifier.size(24.dp).background(color)) }
+                    }
+                }
+            }
+            """.trimIndent(),
+    ) {
         Column {
             everyHueAt500.chunked(HUES_PER_ROW).forEach { rowColors ->
                 Row(horizontalArrangement = gap4()) {

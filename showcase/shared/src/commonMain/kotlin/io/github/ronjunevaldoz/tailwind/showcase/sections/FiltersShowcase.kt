@@ -17,7 +17,18 @@ import io.github.ronjunevaldoz.tailwind.modifiers.sepia
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun FiltersShowcase() {
-    ShowcaseSection(title = "Filters — blurSm, grayscale, invert, sepia") {
+    ShowcaseSection(
+        title = "Filters — blurSm, grayscale, invert, sepia",
+        code =
+            """
+            Row(horizontalArrangement = gap4()) {
+                Box(Modifier.size(40.dp).blurSm().bgBlue500())
+                Box(Modifier.size(40.dp).grayscale().bgBlue500())
+                Box(Modifier.size(40.dp).invert().bgBlue500())
+                Box(Modifier.size(40.dp).sepia().bgBlue500())
+            }
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap4()) {
             Box(Modifier.size(40.dp).blurSm().bgBlue500())
             Box(Modifier.size(40.dp).grayscale().bgBlue500())

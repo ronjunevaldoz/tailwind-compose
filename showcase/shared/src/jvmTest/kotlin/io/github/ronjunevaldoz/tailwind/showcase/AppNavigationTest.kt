@@ -3,8 +3,10 @@ package io.github.ronjunevaldoz.tailwind.showcase
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import org.junit.Rule
 import kotlin.test.Test
 
@@ -39,8 +41,28 @@ class AppNavigationTest {
             )
 
         samples.forEach { (sidebarLabel, detailText) ->
+            // The sidebar is a LazyColumn — items outside the viewport aren't composed,
+            // so scroll the list itself until the target label appears before clicking.
+            composeTestRule
+                .onNodeWithTag(SIDEBAR_LIST_TEST_TAG)
+                .performScrollToNode(hasText(sidebarLabel))
             composeTestRule.onNodeWithText(sidebarLabel).performClick()
             composeTestRule.onNode(hasText(detailText, substring = true)).assertIsDisplayed()
         }
+    }
+
+    @Test
+    fun sectionToggle_switchesBetweenPreviewAndCode() {
+        composeTestRule.setContent {
+            App()
+        }
+
+        // Default category is Spacing, which has exactly one ShowcaseSection —
+        // no ambiguity between multiple Preview/Code tab pairs on screen.
+        composeTestRule.onNodeWithText("Code").performClick()
+        composeTestRule.onNode(hasText("bgSlate200", substring = true)).assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("Preview").performClick()
+        composeTestRule.onNode(hasText("bgSlate200", substring = true)).assertDoesNotExist()
     }
 }

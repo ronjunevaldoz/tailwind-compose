@@ -15,7 +15,17 @@ import io.github.ronjunevaldoz.tailwind.modifiers.size8
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun SizingShowcase() {
-    ShowcaseSection(title = "Sizing — size4, size6, size8, size12") {
+    ShowcaseSection(
+        title = "Sizing — size4, size6, size8, size12",
+        code =
+            """
+            Row(horizontalArrangement = gap4()) {
+                listOf(Modifier.size4(), Modifier.size6(), Modifier.size8(), Modifier.size12()).forEach { size ->
+                    Box(size.bgBlue500())
+                }
+            }
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap4()) {
             listOf(Modifier.size4(), Modifier.size6(), Modifier.size8(), Modifier.size12()).forEach { size ->
                 Box(size.bgBlue500())

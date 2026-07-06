@@ -18,7 +18,20 @@ import io.github.ronjunevaldoz.tailwind.modifiers.transitionAllDuration300
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun TransitionShowcase() {
-    ShowcaseSection(title = "Transitions — transitionAllDuration300") {
+    ShowcaseSection(
+        title = "Transitions — transitionAllDuration300",
+        code =
+            """
+            var expanded by remember { mutableStateOf(false) }
+            Box(
+                Modifier
+                    .transitionAllDuration300()
+                    .size(if (expanded) 80.dp else 40.dp)
+                    .bgBlue500(),
+            )
+            Button(onClick = { expanded = !expanded }) { Text("Toggle size") }
+            """.trimIndent(),
+    ) {
         var expanded by remember { mutableStateOf(false) }
         Box(
             Modifier

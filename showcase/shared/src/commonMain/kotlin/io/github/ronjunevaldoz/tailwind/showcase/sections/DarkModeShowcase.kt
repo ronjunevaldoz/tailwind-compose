@@ -25,7 +25,14 @@ import io.github.ronjunevaldoz.tailwind.modifiers.p4
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun DarkModeShowcase() {
-    ShowcaseSection(title = "Dark Mode — Modifier.bgWhite().twDark { bgSlate900() }") {
+    ShowcaseSection(
+        title = "Dark Mode — Modifier.bgWhite().twDark { bgSlate900() }",
+        code =
+            """
+            // Real usage — reacts to the system theme automatically:
+            Modifier.bgWhite().twDark { bgSlate900() }
+            """.trimIndent(),
+    ) {
         var simulatedDark by remember { mutableStateOf(false) }
         Column {
             Box(Modifier.size(80.dp).let { if (simulatedDark) it.bgSlate900() else it.bgWhite() }.p4()) {

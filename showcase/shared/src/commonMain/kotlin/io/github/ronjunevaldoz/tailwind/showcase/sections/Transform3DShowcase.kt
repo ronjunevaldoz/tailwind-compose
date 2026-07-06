@@ -17,7 +17,17 @@ import io.github.ronjunevaldoz.tailwind.modifiers.rotateZ45
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun Transform3DShowcase() {
-    ShowcaseSection(title = "3D Transforms — rotateX45, rotateY45, rotateZ45") {
+    ShowcaseSection(
+        title = "3D Transforms — rotateX45, rotateY45, rotateZ45",
+        code =
+            """
+            Row(horizontalArrangement = gap4()) {
+                Box(Modifier.size(50.dp).perspectiveNormal().rotateX45().bgBlue500())
+                Box(Modifier.size(50.dp).perspectiveNormal().rotateY45().bgBlue500())
+                Box(Modifier.size(50.dp).perspectiveNormal().rotateZ45().bgBlue500())
+            }
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap4()) {
             Box(
                 Modifier

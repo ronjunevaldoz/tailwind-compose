@@ -18,7 +18,17 @@ private const val SAMPLE_ITEM_COUNT = 8
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun GridShowcase() {
-    ShowcaseSection(title = "Grid — gridCols4") {
+    ShowcaseSection(
+        title = "Grid — gridCols4",
+        code =
+            """
+            LazyVerticalGrid(columns = gridCols4(), modifier = Modifier.height(100.dp)) {
+                items(8) {
+                    Box(Modifier.size(20.dp).padding(2.dp).bgBlue500())
+                }
+            }
+            """.trimIndent(),
+    ) {
         LazyVerticalGrid(
             columns = gridCols4(),
             modifier = Modifier.height(100.dp).padding(top = 8.dp),

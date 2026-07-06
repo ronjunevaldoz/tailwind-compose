@@ -20,7 +20,18 @@ import io.github.ronjunevaldoz.tailwind.modifiers.opacity75
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun OpacityShowcase() {
-    ShowcaseSection(title = "Opacity — 25%, 50%, 75%, 100%") {
+    ShowcaseSection(
+        title = "Opacity — 25%, 50%, 75%, 100%",
+        code =
+            """
+            Row(horizontalArrangement = gap4()) {
+                listOf(Modifier.opacity25(), Modifier.opacity50(), Modifier.opacity75(), Modifier.opacity100())
+                    .forEach { opacity ->
+                        Box(opacity.size(32.dp).bgBlue500())
+                    }
+            }
+            """.trimIndent(),
+    ) {
         Row(horizontalArrangement = gap4()) {
             listOf(Modifier.opacity25(), Modifier.opacity50(), Modifier.opacity75(), Modifier.opacity100())
                 .forEach { opacity ->
