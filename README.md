@@ -62,6 +62,19 @@ Modifier.bgBlue500().opacity50()
 Rule of thumb: **effect modifiers (`bg`/`rounded`/`opacity`/`border`) go first in the chain**,
 sizing/padding modifiers go after.
 
+### Dark mode
+
+Mirrors Tailwind's own `dark:` **variant** — not a semantic color scheme (Tailwind itself has
+no `background`/`surface`/`primary` roles by default, so neither does this library):
+
+```kotlin
+Box(Modifier.bgWhite().twDark { bgSlate900() })
+Text("Hello", style = TextStyle().textSlate900().twDark { textSlate50() })
+```
+
+`twDark { }` applies its block only when `isTwDarkTheme()` (a thin wrapper over Compose's
+`isSystemInDarkTheme()`) is true, otherwise the chain passes through unchanged.
+
 ## Platforms
 
 Android, iOS, Desktop (JVM), Web (JS + WasmJs).

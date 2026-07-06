@@ -44,11 +44,23 @@ Status legend:
 ## Summary
 
 - **Fully covered**: Spacing, Sizing (Sprint 2); Typography, Color/Backgrounds, Borders, Opacity,
-  aspect-ratio (Sprint 3); box-shadow, flex alignment (post-MVP)
-- **Remaining post-MVP item**: dark-mode/semantic theming — needs a design decision before
-  implementation (see project discussion), not yet started
+  aspect-ratio (Sprint 3); box-shadow, flex alignment, dark mode (post-MVP)
 - **Larger, deliberately out of scope for now**: Grid, Filters, Transforms, Transitions/Animation — each needs its own design pass since Compose's model differs enough from CSS that a naive 1:1 port would be misleading
 - **Not applicable to Compose**: Tables, SVG (different API surface entirely), most of Interactivity (pointer/cursor-first concepts), several Layout utilities (float, columns, box-sizing)
+
+## Dark mode
+
+Implemented as Tailwind's own `dark:` **variant** model, not a Material/shadcn-style semantic
+color scheme — Tailwind itself has no semantic tokens by default, so this keeps the library's
+"literal Tailwind naming" philosophy intact rather than introducing a new vocabulary
+(`background`/`surface`/`primary` roles) Tailwind doesn't have:
+
+```kotlin
+Modifier.bgWhite().twDark { bgSlate900() }
+TextStyle().textSlate900().twDark { textSlate50() }
+```
+
+`isTwDarkTheme()` wraps Compose's `isSystemInDarkTheme()`. See `DarkMode.kt`.
 
 ## Refreshing this matrix
 
