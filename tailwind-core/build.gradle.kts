@@ -43,6 +43,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.compose.ui)
             implementation(libs.compose.foundation)
+            implementation(compose.animation)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

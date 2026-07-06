@@ -19,7 +19,8 @@ Status legend:
 | **Typography** | font-size, line-height, font-weight, letter-spacing, text-align | ✅ | Sprint 3 — `TextStyle` extensions in `Typography.kt` (`textLg()`, `fontBold()`, `trackingWide()`, `textAlignCenter()`, ...) |
 | | font-family, text-decoration, text-transform, list-style, content, hyphens | ⬜ | Not on roadmap yet |
 | **Backgrounds** | background-color, text-color | ✅ | Sprint 3 — `bg*()` (Modifier) / `text*()` (TextStyle) in `Color.kt`, generated over all 289 palette colors |
-| | background-image/gradient, position, repeat, size, clip, origin | ⬜ | Not on roadmap; gradients would need a `Brush`-based follow-up |
+| | background-image/gradient (4 cardinal directions) | ✅ | Post-MVP — `bgGradientToR/L/T/B()` in `Gradient.kt`, returns a `Brush` for `Modifier.background(brush)`. Diagonal corners (`to-tr`/`to-br`/`to-bl`/`to-tl`) and `from-*`/`via-*`/`to-*` stop utilities not included — pass the color list directly instead |
+| | position, repeat, size, clip, origin | ⬜ | Not on roadmap |
 | **Borders** | border-radius, border-width, border-color | ✅ | Sprint 3 — `rounded*()` (clip-based) and `border*(color)` in `Border.kt` |
 | | outline-width/color/style/offset | ⬜ | Not on roadmap; Compose's focus-ring story differs enough from CSS outline to need its own design pass |
 | **Effects** | opacity | ✅ | Sprint 3 — `opacity0()`…`opacity100()` (5% steps) in `Opacity.kt` |
@@ -28,14 +29,17 @@ Status legend:
 | **Flexbox & Grid** | gap | ✅ | Covered as part of Sprint 2's `Spacing.kt` (`gap`/`gapX`/`gapY`) |
 | | justify-content, align-items | ✅ | Post-MVP — `justify*()`/`items*()` (Row) and `justify*Vertical()`/`items*Horizontal()` (Column) in `Flex.kt`; `items-baseline`/`items-stretch` have no direct `Alignment` equivalent and are not included |
 | | flex-direction, flex-wrap, order | ⬜ | Not on roadmap; these map to which composable you choose (Row vs Column) and child ordering, not a Modifier utility |
-| | grid-template-columns/rows, grid-column/row, grid-auto-* | ⬜ | Not on roadmap; Compose's `LazyVerticalGrid`/custom `Layout` don't map 1:1 to CSS grid, needs its own design |
+| | grid-cols-* (fixed column count) | ✅ | Post-MVP — `gridCols1()`…`gridCols12()` in `Grid.kt`, returns `GridCells` for `LazyVerticalGrid(columns = ...)` |
+| | grid-template-columns/rows track lists, grid-column/row placement/span, grid-auto-* | ⬜ | Not on roadmap; would need a custom `Layout`, CSS Grid's arbitrary track-sizing doesn't map to `LazyVerticalGrid`'s item-grid model |
 | **Layout** | position, top/right/bottom/left, z-index | ⬜ | Not on roadmap; would map to `Modifier.zIndex()` + a custom offset-from-edge helper |
 | | display, overflow, overscroll-behavior, visibility | ⬜ | Not on roadmap; many (display) are N/A in Compose's layout model |
 | | aspect-ratio | ✅ | Sprint 3 — `aspectSquare()`/`aspectVideo()` in `Layout.kt` (`aspectAuto()` is a documented no-op) |
 | | columns, break-*, box-sizing, float, clear, isolation, object-fit/position | ⬜ | Not on roadmap; several are CSS-print/float concepts with no Compose equivalent |
-| **Filters** | blur, brightness, contrast, grayscale, hue-rotate, invert, saturate, sepia, drop-shadow, backdrop-* | ⬜ | Not on roadmap; Compose has `RenderEffect`/`graphicsLayer` primitives that could back these, non-trivial follow-up |
-| **Transitions & Animation** | transition-*, animation | ⬜ | Not on roadmap; Compose's animation APIs (`animateXAsState`, `AnimatedVisibility`) are a different enough model that a "Tailwind-style" wrapper needs its own design |
-| **Transforms** | rotate, scale, skew, translate, transform-origin, zoom | ⬜ | Not on roadmap; maps to `Modifier.graphicsLayer`, good candidate for a future sprint |
+| **Filters** | blur, grayscale, invert, sepia | ✅ | Post-MVP — `blurNone()`…`blurXl3()` (native `Modifier.blur`); `grayscale()`/`invert()`/`sepia()` via a `ColorMatrix` + layer-paint technique (Compose has no built-in equivalent) in `Filters.kt` |
+| | brightness-*, contrast-*, saturate-*, hue-rotate-*, drop-shadow-*, backdrop-* | ⬜ | Same `ColorMatrix` technique as grayscale/invert/sepia but with a numeric scale instead of boolean on/off — deferred to keep `Filters.kt`'s scope to the boolean filters |
+| **Transitions & Animation** | duration-*, ease-* (tokens), transition-all (size only) | ✅ | Post-MVP — `TwDuration`/`TwEasing` tokens (`tailwind-core`) matching CSS's exact cubic-bezier curves; `transitionAllDuration75/150/300/500()` in `Transition.kt` wraps `Modifier.animateContentSize` (the closest single-Modifier match to CSS's "animate any changed property" — Compose has no general equivalent, other properties need `animateXAsState` at the call site using the same tokens) |
+| **Transforms** | rotate-x/y/z (45/90/180°), perspective (near/normal/distant) | ✅ | Post-MVP — `Transform3D.kt`, via `Modifier.graphicsLayer`'s `rotationX/Y/Z`/`cameraDistance`. Representative subset only (Tailwind's full rotate scale is ~9 steps × 3 axes × 2 signs); `perspective-*` is a named-preset approximation, not a unit conversion (CSS px vs. Compose's inversely-related camera-distance units) |
+| | scale, skew, translate (2D transforms), transform-origin, zoom | ⬜ | Not on roadmap; same `graphicsLayer` primitive as rotate/perspective, straightforward follow-up |
 | **Interactivity** | cursor, scroll-behavior/margin/padding, scroll-snap-*, touch-action, user-select, resize, will-change, appearance | ⬜ | Not on roadmap; several are desktop/pointer-only concepts (cursor) that don't apply to touch-first mobile UIs |
 | **Tables** | border-collapse, border-spacing, table-layout, caption-side | ⬜ | Not planned — Compose has no HTML-table layout primitive; would map to a custom grid composable, out of scope for a Modifier library |
 | **SVG** | fill, stroke, stroke-width | ⬜ | Not planned — Compose styles vector art via `Painter`/`ImageVector` properties, not `Modifier`; different API shape entirely |
@@ -44,9 +48,15 @@ Status legend:
 ## Summary
 
 - **Fully covered**: Spacing, Sizing (Sprint 2); Typography, Color/Backgrounds, Borders, Opacity,
-  aspect-ratio (Sprint 3); box-shadow, flex alignment, dark mode (post-MVP)
-- **Larger, deliberately out of scope for now**: Grid, Filters, Transforms, Transitions/Animation — each needs its own design pass since Compose's model differs enough from CSS that a naive 1:1 port would be misleading
-- **Not applicable to Compose**: Tables, SVG (different API surface entirely), most of Interactivity (pointer/cursor-first concepts), several Layout utilities (float, columns, box-sizing)
+  aspect-ratio (Sprint 3); box-shadow, flex alignment, dark mode, gradients (4 cardinal
+  directions), grid (fixed column count), filters (blur/grayscale/invert/sepia),
+  transitions (size animation + duration/easing tokens), 3D transforms (rotate + perspective
+  presets) (post-MVP)
+- **Deliberately partial**: each of the "bigger lift" post-MVP items above covers the
+  common/representative case, not Tailwind's full numeric scale or CSS's complete model —
+  see each category's row for exactly what's deferred and why
+- **Not applicable to Compose**: Tables, SVG (different API surface entirely), most of Interactivity (pointer/cursor-first concepts), several Layout utilities (float, columns, box-sizing), CSS cascade layers (no cascade concept in Compose), container queries (Compose's answer is `WindowSizeClass`/`BoxWithConstraints`, a different mechanism), CSS custom properties (this library's tokens — `TwColors`, `TwSpacing`, etc. — already are the equivalent single source of truth)
+- **Still pending**: P3/wide-gamut color space (currently targets sRGB; blocked on a reference image the user is providing)
 
 ## Dark mode
 
