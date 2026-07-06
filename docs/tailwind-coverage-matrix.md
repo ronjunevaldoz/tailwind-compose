@@ -17,7 +17,8 @@ Status legend:
 | **Sizing** | width, min/max-width, height, min/max-height | ✅ | Sprint 2 — `w*`/`h*`/`minW*`/`maxW*`/`minH*`/`maxH*`/`size*`/`wFull`/`hFull` in `Sizing.kt` |
 | | inline-size/block-size (logical) | ⬜ | Compose has no separate logical-size axis from width/height; N/A |
 | **Typography** | font-size, line-height, font-weight, letter-spacing, text-align | ✅ | Sprint 3 — `TextStyle` extensions in `Typography.kt` (`textLg()`, `fontBold()`, `trackingWide()`, `textAlignCenter()`, ...) |
-| | font-family, text-decoration, text-transform, list-style, content, hyphens | ⬜ | Not on roadmap yet |
+| | font-family (`font-sans`/`font-serif`/`font-mono`) | ✅ | Post-MVP — `TwFontFamily` (tailwind-core) + `fontSans()`/`fontSerif()`/`fontMono()` in `Typography.kt`. Maps to Compose's generic `FontFamily.SansSerif`/`Serif`/`Monospace` categories rather than Tailwind's literal web font-stack strings — no 1:1 equivalent, each platform substitutes its own default font per category |
+| | text-decoration, text-transform, list-style, content, hyphens | ⬜ | Not on roadmap yet |
 | **Backgrounds** | background-color, text-color | ✅ | Sprint 3 — `bg*()` (Modifier) / `text*()` (TextStyle) in `Color.kt`, generated over all 289 palette colors |
 | | background-image/gradient (4 cardinal directions) | ✅ | Post-MVP — `bgGradientToR/L/T/B()` in `Gradient.kt`, returns a `Brush` for `Modifier.background(brush)`. Diagonal corners (`to-tr`/`to-br`/`to-bl`/`to-tl`) and `from-*`/`via-*`/`to-*` stop utilities not included — pass the color list directly instead |
 | | position, repeat, size, clip, origin | ⬜ | Not on roadmap |

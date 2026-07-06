@@ -102,4 +102,5 @@ fun ColorShowcase() {
             }
         }
     }
+    PaletteMatrixShowcase()
 }

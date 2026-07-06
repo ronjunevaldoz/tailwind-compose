@@ -1,6 +1,7 @@
 package io.github.ronjunevaldoz.tailwind.modifiers
 
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.em
@@ -40,6 +41,18 @@ class TypographyModifierTest {
     fun textAlignCenter_setsCenterAlignment() {
         val style = TextStyle().textAlignCenter()
         assertEquals(TextAlign.Center, style.textAlign)
+    }
+
+    @Test
+    fun fontMono_setsMonospaceFamily() {
+        val style = TextStyle().fontMono()
+        assertEquals(FontFamily.Monospace, style.fontFamily)
+    }
+
+    @Test
+    fun fontSans_setsSansSerifFamily() {
+        val style = TextStyle().fontSans()
+        assertEquals(FontFamily.SansSerif, style.fontFamily)
     }
 
     @Test

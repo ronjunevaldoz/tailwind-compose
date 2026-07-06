@@ -1,5 +1,6 @@
 package io.github.ronjunevaldoz.tailwind.core
 
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import kotlin.test.Test
@@ -25,5 +26,12 @@ class TwTypographyTest {
         assertEquals(FontWeight.Normal, TwFontWeight.normal)
         assertEquals(FontWeight.Bold, TwFontWeight.bold)
         assertEquals(FontWeight.Black, TwFontWeight.black)
+    }
+
+    @Test
+    fun fontFamily_aliasesGenericCategories() {
+        assertEquals(FontFamily.SansSerif, TwFontFamily.sans)
+        assertEquals(FontFamily.Serif, TwFontFamily.serif)
+        assertEquals(FontFamily.Monospace, TwFontFamily.mono)
     }
 }

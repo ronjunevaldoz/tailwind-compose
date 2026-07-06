@@ -2,6 +2,7 @@ package io.github.ronjunevaldoz.tailwind.modifiers
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import io.github.ronjunevaldoz.tailwind.core.TwFontFamily
 import io.github.ronjunevaldoz.tailwind.core.TwFontSize
 import io.github.ronjunevaldoz.tailwind.core.TwFontWeight
 import io.github.ronjunevaldoz.tailwind.core.TwLineHeight
@@ -56,6 +57,13 @@ fun TextStyle.fontBold(): TextStyle = copy(fontWeight = TwFontWeight.bold)
 fun TextStyle.fontExtraBold(): TextStyle = copy(fontWeight = TwFontWeight.extraBold)
 
 fun TextStyle.fontBlack(): TextStyle = copy(fontWeight = TwFontWeight.black)
+
+/** Tailwind's `font-{sans,serif,mono}` font-family utilities. */
+fun TextStyle.fontSans(): TextStyle = copy(fontFamily = TwFontFamily.sans)
+
+fun TextStyle.fontSerif(): TextStyle = copy(fontFamily = TwFontFamily.serif)
+
+fun TextStyle.fontMono(): TextStyle = copy(fontFamily = TwFontFamily.mono)
 
 /** Tailwind's `tracking-*` letter-spacing utilities. */
 fun TextStyle.trackingTighter(): TextStyle = copy(letterSpacing = TwTracking.tighter)

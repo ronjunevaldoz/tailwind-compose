@@ -3,19 +3,20 @@ package io.github.ronjunevaldoz.tailwind.showcase.sections
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.withStyle
 import io.github.ronjunevaldoz.tailwind.core.TwColors
 import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate900
+import io.github.ronjunevaldoz.tailwind.modifiers.fontMono
 import io.github.ronjunevaldoz.tailwind.modifiers.p3
 import io.github.ronjunevaldoz.tailwind.modifiers.roundedMd
+import io.github.ronjunevaldoz.tailwind.modifiers.textSlate300
 import io.github.ronjunevaldoz.tailwind.modifiers.textSm
 
 private val KOTLIN_KEYWORDS =
@@ -105,7 +106,11 @@ fun CodeBlock(
     ) {
         Text(
             text = highlighted,
-            style = TextStyle(fontFamily = FontFamily.Monospace, color = TwColors.slate300).textSm(),
+            style =
+                MaterialTheme.typography.bodyMedium
+                    .textSm()
+                    .fontMono()
+                    .textSlate300(),
         )
     }
 }

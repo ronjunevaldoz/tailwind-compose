@@ -1,5 +1,6 @@
 package io.github.ronjunevaldoz.tailwind.core
 
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
@@ -50,6 +51,20 @@ object TwFontWeight {
     val bold: FontWeight = FontWeight.Bold
     val extraBold: FontWeight = FontWeight.ExtraBold
     val black: FontWeight = FontWeight.Black
+}
+
+/**
+ * Tailwind's `font-*` family scale (`font-sans`, `font-serif`, `font-mono`). Tailwind's
+ * actual stacks are web-specific system-font lists (e.g. `ui-sans-serif, system-ui, ...`)
+ * with no 1:1 Compose equivalent, so this maps to Compose's generic [FontFamily]
+ * categories instead — each platform substitutes its own default sans/serif/monospace
+ * font for that category, which is the closest analogue to Tailwind's "use the
+ * platform's native stack" intent.
+ */
+object TwFontFamily {
+    val sans: FontFamily = FontFamily.SansSerif
+    val serif: FontFamily = FontFamily.Serif
+    val mono: FontFamily = FontFamily.Monospace
 }
 
 /** Tailwind's `tracking-*` letter-spacing scale. */
