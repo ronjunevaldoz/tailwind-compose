@@ -23,10 +23,11 @@ Status legend:
 | **Borders** | border-radius, border-width, border-color | ✅ | Sprint 3 — `rounded*()` (clip-based) and `border*(color)` in `Border.kt` |
 | | outline-width/color/style/offset | ⬜ | Not on roadmap; Compose's focus-ring story differs enough from CSS outline to need its own design pass |
 | **Effects** | opacity | ✅ | Sprint 3 — `opacity0()`…`opacity100()` (5% steps) in `Opacity.kt` |
-| | box-shadow | ⏳ | Roadmap post-MVP item [9] "shadow/elevation utilities" — not started |
+| | box-shadow | ✅ | Post-MVP — `shadowSm()`…`shadowXl2()` in `Shadow.kt`, approximated as Compose elevation (single Dp, not CSS's offset/blur/spread/color); `shadow-inner` has no Compose primitive and is not included |
 | | text-shadow, mix/background-blend-mode, mask-* | ⬜ | Not on roadmap; mask-* has a Compose equivalent (`Modifier.graphicsLayer` + `BlendMode`) but is a bigger lift |
 | **Flexbox & Grid** | gap | ✅ | Covered as part of Sprint 2's `Spacing.kt` (`gap`/`gapX`/`gapY`) |
-| | justify-content, align-items, flex-direction, flex-wrap, order | ⏳ | Roadmap post-MVP item [10] "flex-like layout sugar" — not started |
+| | justify-content, align-items | ✅ | Post-MVP — `justify*()`/`items*()` (Row) and `justify*Vertical()`/`items*Horizontal()` (Column) in `Flex.kt`; `items-baseline`/`items-stretch` have no direct `Alignment` equivalent and are not included |
+| | flex-direction, flex-wrap, order | ⬜ | Not on roadmap; these map to which composable you choose (Row vs Column) and child ordering, not a Modifier utility |
 | | grid-template-columns/rows, grid-column/row, grid-auto-* | ⬜ | Not on roadmap; Compose's `LazyVerticalGrid`/custom `Layout` don't map 1:1 to CSS grid, needs its own design |
 | **Layout** | position, top/right/bottom/left, z-index | ⬜ | Not on roadmap; would map to `Modifier.zIndex()` + a custom offset-from-edge helper |
 | | display, overflow, overscroll-behavior, visibility | ⬜ | Not on roadmap; many (display) are N/A in Compose's layout model |
@@ -42,8 +43,10 @@ Status legend:
 
 ## Summary
 
-- **Fully covered**: Spacing, Sizing (Sprint 2); Typography, Color/Backgrounds, Borders, Opacity, aspect-ratio (Sprint 3)
-- **On the roadmap, not started**: box-shadow, flex alignment helpers (both post-MVP)
+- **Fully covered**: Spacing, Sizing (Sprint 2); Typography, Color/Backgrounds, Borders, Opacity,
+  aspect-ratio (Sprint 3); box-shadow, flex alignment (post-MVP)
+- **Remaining post-MVP item**: dark-mode/semantic theming — needs a design decision before
+  implementation (see project discussion), not yet started
 - **Larger, deliberately out of scope for now**: Grid, Filters, Transforms, Transitions/Animation — each needs its own design pass since Compose's model differs enough from CSS that a naive 1:1 port would be misleading
 - **Not applicable to Compose**: Tables, SVG (different API surface entirely), most of Interactivity (pointer/cursor-first concepts), several Layout utilities (float, columns, box-sizing)
 
