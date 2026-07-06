@@ -142,8 +142,8 @@ fun DarkModeShowcase() {
                     .align(Alignment.CenterStart)
                     .offset { IntOffset((dividerX - handleSizePx / 2).roundToInt(), 0) }
                     .size(HANDLE_SIZE)
-                    .bgSky500()
                     .roundedFull()
+                    .bgSky500()
                     .testTag(DARK_MODE_HANDLE_TEST_TAG)
                     .pointerInput(Unit) {
                         detectDragGestures { change, dragAmount ->
@@ -177,7 +177,7 @@ private fun CompareContent(
             .p4(),
         verticalArrangement = gap2(),
     ) {
-        Box(Modifier.size(28.dp).bgSlate300().roundedFull())
+        Box(Modifier.size(28.dp).roundedFull().bgSlate300())
         Text(
             "BALANCE",
             style =
@@ -196,8 +196,8 @@ private fun CompareContent(
         )
         Box(
             Modifier
-                .let { if (isDark) it.bgSlate700() else it.bgSlate900() }
                 .roundedFull()
+                .let { if (isDark) it.bgSlate700() else it.bgSlate900() }
                 .px4()
                 .py2(),
         ) {

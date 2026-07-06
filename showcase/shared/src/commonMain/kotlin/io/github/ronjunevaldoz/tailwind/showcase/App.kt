@@ -114,8 +114,8 @@ private fun Sidebar(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .let { if (isSelected) it.bgSlate900() else it }
                             .roundedMd()
+                            .let { if (isSelected) it.bgSlate900() else it }
                             .clickable { onSelect(category) }
                             .px3()
                             .py2(),

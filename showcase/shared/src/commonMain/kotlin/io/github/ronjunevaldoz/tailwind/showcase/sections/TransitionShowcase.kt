@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.github.ronjunevaldoz.tailwind.core.TwColors
 import io.github.ronjunevaldoz.tailwind.core.TwEasing
+import io.github.ronjunevaldoz.tailwind.core.TwRadius
 import io.github.ronjunevaldoz.tailwind.modifiers.bg
 import io.github.ronjunevaldoz.tailwind.modifiers.bgBlue500
 import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate200
@@ -141,11 +143,12 @@ private fun EasingCurveRow(named: NamedEasing) {
     )
 
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = gap4()) {
+        val graphShape = RoundedCornerShape(TwRadius.md)
         Canvas(
             Modifier
-                .bgSlate50()
                 .roundedMd()
-                .border(TwColors.slate200)
+                .bgSlate50()
+                .border(TwColors.slate200, graphShape)
                 .size(GRAPH_SIZE),
         ) {
             val path = Path()

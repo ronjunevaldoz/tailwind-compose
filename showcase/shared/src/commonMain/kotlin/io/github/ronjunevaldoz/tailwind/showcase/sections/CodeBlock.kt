@@ -99,8 +99,8 @@ fun CodeBlock(
     val highlighted = remember(code) { highlightKotlin(code) }
     Box(
         modifier
-            .bgSlate900()
             .roundedMd()
+            .bgSlate900()
             .horizontalScroll(rememberScrollState())
             .p3(),
     ) {

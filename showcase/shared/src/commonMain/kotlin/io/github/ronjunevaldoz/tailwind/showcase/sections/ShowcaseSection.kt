@@ -46,11 +46,15 @@ fun ShowcaseSection(
 ) {
     var showCode by remember { mutableStateOf(false) }
     Column(
+        // Shape-affecting modifiers must be ordered shadow -> clip -> background: a Compose
+        // shadow's halo is clipped by anything applied before it, and a background painted
+        // before a clip() ignores that clip entirely (it's drawn outside the clipped layer).
+        // See docs/tailwind-coverage-matrix.md for the corner-artifact this order avoids.
         modifier =
             modifier
-                .bgWhite()
-                .roundedLg()
                 .shadowSm()
+                .roundedLg()
+                .bgWhite()
                 .p4(),
     ) {
         Text(
@@ -92,8 +96,8 @@ private fun SectionTab(
                 .let { if (selected) it.textWhite() else it },
         modifier =
             Modifier
-                .let { if (selected) it.bgSlate900() else it.bgSlate100() }
                 .rounded()
+                .let { if (selected) it.bgSlate900() else it.bgSlate100() }
                 .clickable(onClick = onClick)
                 .px3()
                 .py1(),
