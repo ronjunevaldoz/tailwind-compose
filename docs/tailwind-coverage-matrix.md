@@ -22,7 +22,7 @@ Status legend:
 | **Backgrounds** | background-color, text-color | ✅ | Sprint 3 — `bg*()` (Modifier) / `text*()` (TextStyle) in `Color.kt`, generated over all 289 palette colors |
 | | background-image/gradient (4 cardinal directions) | ✅ | Post-MVP — `bgGradientToR/L/T/B()` in `Gradient.kt`, returns a `Brush` for `Modifier.background(brush)`. Diagonal corners (`to-tr`/`to-br`/`to-bl`/`to-tl`) and `from-*`/`via-*`/`to-*` stop utilities not included — pass the color list directly instead |
 | | position, repeat, size, clip, origin | ⬜ | Not on roadmap |
-| **Borders** | border-radius, border-width, border-color | ✅ | Sprint 3 — `rounded*()` (clip-based) and `border*(color)` in `Border.kt` |
+| **Borders** | border-radius, border-width, border-color | ✅ | Sprint 3 — `rounded*()` (clip-based) and `border*(color, shape = RectangleShape)` in `Border.kt`. The `shape` param (post-MVP addition) lets a border round independent of a `clip()` call — pass the same `Shape` to both for a border that's guaranteed to match, rather than relying on `clip()`'s layer-wide effect on a later `border()` in the same chain |
 | | outline-width/color/style/offset | ⬜ | Not on roadmap; Compose's focus-ring story differs enough from CSS outline to need its own design pass |
 | **Effects** | opacity | ✅ | Sprint 3 — `opacity0()`…`opacity100()` (5% steps) in `Opacity.kt` |
 | | box-shadow | ✅ | Post-MVP — `shadowSm()`…`shadowXl2()` in `Shadow.kt`, approximated as Compose elevation (single Dp, not CSS's offset/blur/spread/color); `shadow-inner` has no Compose primitive and is not included |
