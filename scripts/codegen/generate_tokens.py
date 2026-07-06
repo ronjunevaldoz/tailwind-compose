@@ -5,7 +5,7 @@ Run from repo root: python3 scripts/codegen/generate_tokens.py
 """
 import os
 
-from tailwind_scale import COLOR_PALETTE, GENERATED_HEADER, SPACING_SCALE, scale_suffix
+from tailwind_scale import COLOR_PALETTE_OKLCH, GENERATED_HEADER, SPACING_SCALE, scale_suffix
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CORE_PKG_DIR = os.path.join(
@@ -47,8 +47,10 @@ def generate_color_tokens() -> str:
         "package io.github.ronjunevaldoz.tailwind.core\n",
         "import androidx.compose.ui.graphics.Color\n",
         "/**",
-        " * Tailwind's default color palette — 22 hues x 11 shades (50-950),",
-        " * plus black/white/transparent.",
+        " * Tailwind v4's default color palette — 26 hues x 11 shades (50-950),",
+        " * plus black/white/transparent. Each value is defined from its authoritative",
+        " * OKLCH(lightness, chroma, hue) source values (see Oklch.kt) rather than a",
+        " * hand-picked hex approximation.",
         " */",
         "@Suppress(\"MagicNumber\")",
         "object TwColors {",
@@ -57,10 +59,10 @@ def generate_color_tokens() -> str:
         "    val transparent: Color = Color(0x00000000)",
         "",
     ]
-    for hue, shades in COLOR_PALETTE.items():
-        for shade, hex_value in shades.items():
+    for hue, shades in COLOR_PALETTE_OKLCH.items():
+        for shade, (l, c, h) in shades.items():
             prop_name = f"{hue}{shade}"
-            lines.append(f"    val {prop_name}: Color = Color(0xFF{hex_value.upper()})")
+            lines.append(f"    val {prop_name}: Color = Oklch({l}f, {c}f, {h}f).toColor()")
         lines.append("")
     lines.append("}")
     lines.append("")
