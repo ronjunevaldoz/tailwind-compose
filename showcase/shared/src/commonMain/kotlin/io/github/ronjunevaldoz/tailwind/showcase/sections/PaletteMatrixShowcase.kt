@@ -1,6 +1,5 @@
 package io.github.ronjunevaldoz.tailwind.showcase.sections
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
@@ -23,6 +22,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.github.ronjunevaldoz.tailwind.core.TwColors
+import io.github.ronjunevaldoz.tailwind.modifiers.bg
 import io.github.ronjunevaldoz.tailwind.modifiers.border
 import io.github.ronjunevaldoz.tailwind.modifiers.fontMono
 import io.github.ronjunevaldoz.tailwind.modifiers.textSm
@@ -80,7 +80,7 @@ fun PaletteMatrixShowcase() {
                             val swatch = hueColumn[shadeIndex]
                             Box(
                                 Modifier
-                                    .background(swatch.color)
+                                    .bg(swatch.color)
                                     .border(TwColors.white)
                                     .width(CELL_WIDTH)
                                     .height(CELL_HEIGHT)

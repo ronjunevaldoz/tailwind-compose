@@ -1,6 +1,5 @@
 package io.github.ronjunevaldoz.tailwind.showcase.sections
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.ronjunevaldoz.tailwind.core.TwColors
+import io.github.ronjunevaldoz.tailwind.modifiers.bg
 import io.github.ronjunevaldoz.tailwind.modifiers.gap1
 import io.github.ronjunevaldoz.tailwind.modifiers.gap4
 
@@ -72,12 +72,12 @@ fun ColorShowcase() {
             """
             val blueRamp = listOf(TwColors.blue50, TwColors.blue100, /* ... */ TwColors.blue950)
             Row(horizontalArrangement = gap1()) {
-                blueRamp.forEach { color -> Box(Modifier.size(24.dp).background(color)) }
+                blueRamp.forEach { color -> Box(Modifier.size(24.dp).bg(color)) }
             }
             """.trimIndent(),
     ) {
         Row(horizontalArrangement = gap1()) {
-            blueRamp.forEach { color -> Box(Modifier.size(24.dp).background(color)) }
+            blueRamp.forEach { color -> Box(Modifier.size(24.dp).bg(color)) }
         }
     }
     ShowcaseSection(
@@ -88,7 +88,7 @@ fun ColorShowcase() {
             Column {
                 everyHueAt500.chunked(9).forEach { rowColors ->
                     Row(horizontalArrangement = gap4()) {
-                        rowColors.forEach { color -> Box(Modifier.size(24.dp).background(color)) }
+                        rowColors.forEach { color -> Box(Modifier.size(24.dp).bg(color)) }
                     }
                 }
             }
@@ -97,7 +97,7 @@ fun ColorShowcase() {
         Column {
             everyHueAt500.chunked(HUES_PER_ROW).forEach { rowColors ->
                 Row(horizontalArrangement = gap4()) {
-                    rowColors.forEach { color -> Box(Modifier.size(24.dp).background(color)) }
+                    rowColors.forEach { color -> Box(Modifier.size(24.dp).bg(color)) }
                 }
             }
         }

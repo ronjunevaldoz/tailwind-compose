@@ -56,4 +56,23 @@ class ColorModifierTest {
         val style = TextStyle().textWhite()
         assertEquals(TwColors.white, style.color)
     }
+
+    @Test
+    fun bg_arbitraryValue_paintsTheGivenColor() {
+        composeTestRule.setContent {
+            Box(Modifier.testTag("box").size(20.dp).bg(TwColors.emerald400))
+        }
+        val pixel =
+            composeTestRule
+                .onNodeWithTag("box")
+                .captureToImage()
+                .toPixelMap()[10, 10]
+        assertEquals(TwColors.emerald400, pixel)
+    }
+
+    @Test
+    fun text_arbitraryValue_setsTextStyleColor() {
+        val style = TextStyle().text(TwColors.emerald400)
+        assertEquals(TwColors.emerald400, style.color)
+    }
 }

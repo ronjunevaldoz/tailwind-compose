@@ -34,8 +34,16 @@ def generate() -> str:
         "package io.github.ronjunevaldoz.tailwind.modifiers\n",
         "import androidx.compose.foundation.background",
         "import androidx.compose.ui.Modifier",
+        "import androidx.compose.ui.graphics.Color",
         "import androidx.compose.ui.text.TextStyle",
         "import io.github.ronjunevaldoz.tailwind.core.TwColors\n",
+        "/**",
+        " * Tailwind's arbitrary-value syntax (`bg-[#1da1f2]`, `text-[#1da1f2]`) for a color that",
+        " * isn't one of the named palette steps below -- e.g. a color picked at runtime from a",
+        " * `List<Color>` rather than known at compile time.",
+        " */",
+        "fun Modifier.bg(color: Color): Modifier = this.background(color)\n",
+        "fun TextStyle.text(color: Color): TextStyle = this.copy(color = color)\n",
         "/** Background-color Modifier extensions over Tailwind's default palette. */",
     ]
     for name in all_color_names():

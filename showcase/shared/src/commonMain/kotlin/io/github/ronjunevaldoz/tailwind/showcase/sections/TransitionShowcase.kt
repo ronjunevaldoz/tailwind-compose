@@ -7,7 +7,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.github.ronjunevaldoz.tailwind.core.TwColors
 import io.github.ronjunevaldoz.tailwind.core.TwEasing
+import io.github.ronjunevaldoz.tailwind.modifiers.bg
 import io.github.ronjunevaldoz.tailwind.modifiers.bgBlue500
 import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate200
 import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate50
@@ -181,7 +181,7 @@ private fun EasingCurveRow(named: NamedEasing) {
                         .align(Alignment.CenterStart)
                         .offset { IntOffset((progress * trackPx).roundToInt(), 0) }
                         .size(TRACK_DOT_SIZE)
-                        .background(named.color)
+                        .bg(named.color)
                         .roundedFull(),
                 )
             }
