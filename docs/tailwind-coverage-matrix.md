@@ -46,6 +46,7 @@ Status legend:
 | **Tables** | border-collapse, border-spacing, table-layout, caption-side | ⬜ | Not planned — Compose has no HTML-table layout primitive; would map to a custom grid composable, out of scope for a Modifier library |
 | **SVG** | fill, stroke, stroke-width | ⬜ | Not planned — Compose styles vector art via `Painter`/`ImageVector` properties, not `Modifier`; different API shape entirely |
 | **Accessibility** | forced-color-adjust | ⬜ | Not planned — Compose's accessibility story is `Modifier.semantics`/`contentDescription`, unrelated to this CSS media-query concept |
+| **Responsive design** | `sm:`/`md:`/`lg:`/`xl:`/`2xl:` breakpoints | ✅ | Post-MVP — `TwBreakpoint` (tailwind-core, exact 640/768/1024/1280/1536dp match for `--breakpoint-*`) + `twResponsive()` (tailwind-modifiers), a value-resolver rather than a chainable variant — see "Responsive design" section below for why |
 
 ## Summary
 
@@ -57,7 +58,7 @@ Status legend:
 - **Deliberately partial**: each of the "bigger lift" post-MVP items above covers the
   common/representative case, not Tailwind's full numeric scale or CSS's complete model —
   see each category's row for exactly what's deferred and why
-- **Not applicable to Compose**: Tables, SVG (different API surface entirely), most of Interactivity (pointer/cursor-first concepts), several Layout utilities (float, columns, box-sizing), CSS cascade layers (no cascade concept in Compose), container queries (Compose's answer is `WindowSizeClass`/`BoxWithConstraints`, a different mechanism), CSS custom properties (this library's tokens — `TwColors`, `TwSpacing`, etc. — already are the equivalent single source of truth)
+- **Not applicable to Compose**: Tables, SVG (different API surface entirely), most of Interactivity (pointer/cursor-first concepts), several Layout utilities (float, columns, box-sizing), CSS cascade layers (no cascade concept in Compose), container queries (Compose's answer is `BoxWithConstraints`, a genuinely different mechanism than the viewport-based `sm:`/`md:`/`lg:` breakpoints — see "Responsive design" below), CSS custom properties (this library's tokens — `TwColors`, `TwSpacing`, etc. — already are the equivalent single source of truth)
 - **P3/wide-gamut color**: not a data gap — `TwColors.kt` already sources the exact OKLCH triples Tailwind v4 ships (verified against `tailwindcss.com`'s own docs, which confirm there's no separate P3 palette; browsers just render OKLCH in the widest gamut the display supports). The blocker is Compose Multiplatform itself: `Color.toArgb()` — used by every `Paint.color` setter on every target (`AndroidPaint.android.kt`, `SkiaBackedPaint.skiko.kt`, verified in Compose Multiplatform 1.11.1 sources) — calls `convert(ColorSpaces.Srgb).value shr 32`, gamut-mapping and clipping to 8-bit sRGB before the pixel is drawn. Tagging a `Color` with `ColorSpaces.DisplayP3` compiles but is discarded before compositing, on Android included, not just non-Android targets. No Modifier-level workaround exists; would require a wide-gamut-aware paint path upstream in Compose. See the "P3 Colors" showcase screen for the full writeup.
 
 ## Dark mode
@@ -73,6 +74,25 @@ TextStyle().textSlate900().twDark { textSlate50() }
 ```
 
 `isTwDarkTheme()` wraps Compose's `isSystemInDarkTheme()`. See `DarkMode.kt`.
+
+## Responsive design
+
+Not modeled as a chainable variant like `dark:`, deliberately — `dark:` is a binary switch (light
+XOR dark), but `sm:`/`md:`/`lg:`/`xl:`/`2xl:` are cumulative `min-width` thresholds: at a
+1024dp-wide window, `sm`, `md`, *and* `lg` are all simultaneously true. A `twSm { }.twMd { }.twLg { }`
+chain modeled on `twDark { }` would apply every matching block (e.g. three stacked `.padding()`
+calls) instead of the one Tailwind's cascade actually resolves to. `twResponsive()` instead
+picks a single value up front, mobile-first, largest-matching-breakpoint-wins:
+
+```kotlin
+Modifier.padding(twResponsive(base = TwSpacing.scale4, md = TwSpacing.scale6, lg = TwSpacing.scale8))
+val columns = twResponsive(base = 2, sm = 3, md = 4, lg = 6, xl = 8)
+```
+
+Backed by `LocalWindowInfo.current.containerDpSize` (`currentTwWindowWidth()` in `Responsive.kt`)
+— the actual window/viewport size, not `BoxWithConstraints` (which measures the local container,
+Tailwind's *different* `@container` concept) and not Material's `WindowSizeClass` (whose
+600dp/840dp breakpoints don't match Tailwind's 640/768/1024/1280/1536 scale in `TwBreakpoint`).
 
 ## Refreshing this matrix
 

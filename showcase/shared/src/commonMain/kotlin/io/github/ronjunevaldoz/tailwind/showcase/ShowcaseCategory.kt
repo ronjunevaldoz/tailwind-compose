@@ -22,6 +22,7 @@ enum class ShowcaseCategory(
     Transition("Transitions"),
     Transform3D("3D Transforms"),
     DarkMode("Dark Mode"),
+    Responsive("Responsive"),
     CssVariables("CSS Variables", isExplainerOnly = true),
     CascadeLayers("Cascade Layers", isExplainerOnly = true),
     ContainerQueries("Container Queries", isExplainerOnly = true),

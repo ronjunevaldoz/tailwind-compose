@@ -33,6 +33,7 @@ class AppNavigationTest {
                 "Grid" to "Grid — gridCols4",
                 "3D Transforms" to "3D Transforms — rotateX45, rotateY45, rotateZ45",
                 "Dark Mode" to "Dark Mode — Modifier.bgWhite().twDark { bgSlate900() }",
+                "Responsive" to "Responsive — twResponsive(sm:, md:, lg:, xl:)",
                 // Substring of the explainer body, not the title — the title text is
                 // identical to the sidebar label for explainer-only categories, which
                 // would otherwise match two nodes (sidebar item + detail heading).

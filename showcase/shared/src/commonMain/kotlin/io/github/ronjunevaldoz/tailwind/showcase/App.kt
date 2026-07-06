@@ -50,6 +50,7 @@ import io.github.ronjunevaldoz.tailwind.showcase.sections.GridShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.LogicalPropertiesExplainer
 import io.github.ronjunevaldoz.tailwind.showcase.sections.OpacityShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.P3ColorsExplainer
+import io.github.ronjunevaldoz.tailwind.showcase.sections.ResponsiveShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.ShadowShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.SizingShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.SpacingShowcase
@@ -143,6 +144,7 @@ private fun CategoryDetail(category: ShowcaseCategory) {
         ShowcaseCategory.Transition -> TransitionShowcase()
         ShowcaseCategory.Transform3D -> Transform3DShowcase()
         ShowcaseCategory.DarkMode -> DarkModeShowcase()
+        ShowcaseCategory.Responsive -> ResponsiveShowcase()
         ShowcaseCategory.CssVariables -> CssVariablesExplainer()
         ShowcaseCategory.CascadeLayers -> CascadeLayersExplainer()
         ShowcaseCategory.ContainerQueries -> ContainerQueriesExplainer()
