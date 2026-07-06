@@ -66,3 +66,29 @@ fun LogicalPropertiesExplainer() {
         )
     }
 }
+
+@Suppress("ktlint:standard:function-naming")
+@Composable
+fun P3ColorsExplainer() {
+    ShowcaseSection(title = "P3 Colors") {
+        Text(
+            "Tailwind v4 doesn't ship a separate P3 palette — every color is defined " +
+                "as a single OKLCH triple, and browsers render OKLCH in the widest gamut " +
+                "the display supports (sRGB or P3), automatically. TwColors.kt already " +
+                "sources the exact same OKLCH values from Oklch.kt, so the color data " +
+                "itself has never been the gap.\n\n" +
+                "The gap is Compose's rendering pipeline: Modifier.background() and every " +
+                "other path through androidx.compose.ui.graphics.Paint calls " +
+                "Color.toArgb(), which does `convert(ColorSpaces.Srgb).value shr 32` — " +
+                "gamut-mapping and clipping down to 8-bit sRGB before the pixel is ever " +
+                "drawn. That's true on every Compose Multiplatform target (Android, " +
+                "Desktop/Skiko, iOS, JS, WasmJs) as of Compose Multiplatform 1.11.1, not " +
+                "just platforms without wide-gamut displays. Tagging a Color with " +
+                "ColorSpaces.DisplayP3 compiles and carries the metadata, but that " +
+                "metadata is discarded before compositing, so it currently buys nothing " +
+                "through the standard Modifier surface this library builds on. Not " +
+                "something a Modifier-based utility library can work around — it would " +
+                "need Compose itself to add a wide-gamut-aware paint path.",
+        )
+    }
+}

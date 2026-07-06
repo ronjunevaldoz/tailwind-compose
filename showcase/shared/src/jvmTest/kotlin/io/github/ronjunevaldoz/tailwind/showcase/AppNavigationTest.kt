@@ -35,6 +35,7 @@ class AppNavigationTest {
                 // identical to the sidebar label for explainer-only categories, which
                 // would otherwise match two nodes (sidebar item + detail heading).
                 "Cascade Layers" to "no stylesheet and no cascade",
+                "P3 Colors" to "gamut-mapping and clipping down to 8-bit sRGB",
             )
 
         samples.forEach { (sidebarLabel, detailText) ->

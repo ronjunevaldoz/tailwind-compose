@@ -37,6 +37,7 @@ import io.github.ronjunevaldoz.tailwind.showcase.sections.GradientShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.GridShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.LogicalPropertiesExplainer
 import io.github.ronjunevaldoz.tailwind.showcase.sections.OpacityShowcase
+import io.github.ronjunevaldoz.tailwind.showcase.sections.P3ColorsExplainer
 import io.github.ronjunevaldoz.tailwind.showcase.sections.ShadowShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.SizingShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.SpacingShowcase
@@ -104,6 +105,7 @@ private fun CategoryDetail(category: ShowcaseCategory) {
         ShowcaseCategory.CascadeLayers -> CascadeLayersExplainer()
         ShowcaseCategory.ContainerQueries -> ContainerQueriesExplainer()
         ShowcaseCategory.LogicalProperties -> LogicalPropertiesExplainer()
+        ShowcaseCategory.P3Colors -> P3ColorsExplainer()
     }
 }
 

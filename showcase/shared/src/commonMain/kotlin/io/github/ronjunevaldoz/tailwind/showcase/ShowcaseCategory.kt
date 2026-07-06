@@ -26,4 +26,5 @@ enum class ShowcaseCategory(
     CascadeLayers("Cascade Layers", isExplainerOnly = true),
     ContainerQueries("Container Queries", isExplainerOnly = true),
     LogicalProperties("Logical Properties", isExplainerOnly = true),
+    P3Colors("P3 Colors", isExplainerOnly = true),
 }

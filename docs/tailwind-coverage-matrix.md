@@ -56,7 +56,7 @@ Status legend:
   common/representative case, not Tailwind's full numeric scale or CSS's complete model —
   see each category's row for exactly what's deferred and why
 - **Not applicable to Compose**: Tables, SVG (different API surface entirely), most of Interactivity (pointer/cursor-first concepts), several Layout utilities (float, columns, box-sizing), CSS cascade layers (no cascade concept in Compose), container queries (Compose's answer is `WindowSizeClass`/`BoxWithConstraints`, a different mechanism), CSS custom properties (this library's tokens — `TwColors`, `TwSpacing`, etc. — already are the equivalent single source of truth)
-- **Still pending**: P3/wide-gamut color space (currently targets sRGB; blocked on a reference image the user is providing)
+- **P3/wide-gamut color**: not a data gap — `TwColors.kt` already sources the exact OKLCH triples Tailwind v4 ships (verified against `tailwindcss.com`'s own docs, which confirm there's no separate P3 palette; browsers just render OKLCH in the widest gamut the display supports). The blocker is Compose Multiplatform itself: `Color.toArgb()` — used by every `Paint.color` setter on every target (`AndroidPaint.android.kt`, `SkiaBackedPaint.skiko.kt`, verified in Compose Multiplatform 1.11.1 sources) — calls `convert(ColorSpaces.Srgb).value shr 32`, gamut-mapping and clipping to 8-bit sRGB before the pixel is drawn. Tagging a `Color` with `ColorSpaces.DisplayP3` compiles but is discarded before compositing, on Android included, not just non-Android targets. No Modifier-level workaround exists; would require a wide-gamut-aware paint path upstream in Compose. See the "P3 Colors" showcase screen for the full writeup.
 
 ## Dark mode
 
