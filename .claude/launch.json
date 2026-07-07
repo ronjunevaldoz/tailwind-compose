@@ -5,7 +5,8 @@
       "name": "showcase-wasmjs",
       "runtimeExecutable": "./gradlew",
       "runtimeArgs": ["--continuous", ":showcase:shared:wasmJsBrowserDevelopmentRun"],
-      "port": 8080
+      "port": 8080,
+      "autoPort": true
     }
   ]
 }
