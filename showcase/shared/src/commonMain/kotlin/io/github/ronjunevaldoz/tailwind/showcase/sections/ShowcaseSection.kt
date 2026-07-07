@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -47,7 +48,12 @@ fun ShowcaseSection(
 ) {
     var showCode by remember { mutableStateOf(false) }
     Column(
-        modifier = modifier.twCard().twDark { bgSlate800() }.p4(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .twCard()
+                .twDark { bgSlate800() }
+                .p4(),
     ) {
         Text(
             text = title,
