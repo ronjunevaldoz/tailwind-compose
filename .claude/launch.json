@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "showcase-wasmjs",
+      "runtimeExecutable": "./gradlew",
+      "runtimeArgs": ["--continuous", ":showcase:shared:wasmJsBrowserDevelopmentRun"],
+      "port": 8080
+    }
+  ]
+}
