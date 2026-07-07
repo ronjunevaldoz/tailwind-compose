@@ -34,10 +34,9 @@ fun Modifier.blurXl3(): Modifier = this.blur(64.dp)
  * Tailwind's boolean `grayscale`/`invert`/`sepia` filter utilities. Compose has no
  * built-in equivalent to these (unlike `blur`, which is a first-class modifier), so
  * each is implemented as a [ColorMatrix] applied via a layer paint — the standard
- * technique for full-content color filters in Compose. `brightness-*`, `contrast-*`,
- * `saturate-*`, and `hue-rotate-*` (Tailwind's numeric-scale filters) are not
- * included; they're the same technique with different matrix values, deferred to
- * keep this file's scope to the boolean on/off filters.
+ * technique for full-content color filters in Compose. `hue-rotate-*` (Tailwind's
+ * remaining numeric-scale filter) is not included; it needs a rotation matrix rather
+ * than the scale/translate ones below, deferred until something actually needs it.
  */
 fun Modifier.grayscale(): Modifier = colorMatrixFilter(ColorMatrix().apply { setToSaturation(0f) })
 
@@ -96,6 +95,98 @@ private val sepiaMatrix =
     )
 
 fun Modifier.sepia(): Modifier = colorMatrixFilter(sepiaMatrix)
+
+/**
+ * Tailwind's `brightness-*` filter scale (CSS `brightness(<amount>%)`), a plain RGB
+ * channel scale with alpha untouched — canonical stops per Tailwind v4's `utilities.ts`
+ * `suggest('brightness', ...)` list.
+ */
+private fun brightnessMatrix(amount: Float): ColorMatrix =
+    ColorMatrix().apply { setToScale(amount, amount, amount, 1f) }
+
+fun Modifier.brightness0(): Modifier = colorMatrixFilter(brightnessMatrix(0.00f))
+
+fun Modifier.brightness50(): Modifier = colorMatrixFilter(brightnessMatrix(0.50f))
+
+fun Modifier.brightness75(): Modifier = colorMatrixFilter(brightnessMatrix(0.75f))
+
+fun Modifier.brightness90(): Modifier = colorMatrixFilter(brightnessMatrix(0.90f))
+
+fun Modifier.brightness95(): Modifier = colorMatrixFilter(brightnessMatrix(0.95f))
+
+fun Modifier.brightness100(): Modifier = colorMatrixFilter(brightnessMatrix(1.00f))
+
+fun Modifier.brightness105(): Modifier = colorMatrixFilter(brightnessMatrix(1.05f))
+
+fun Modifier.brightness110(): Modifier = colorMatrixFilter(brightnessMatrix(1.10f))
+
+fun Modifier.brightness125(): Modifier = colorMatrixFilter(brightnessMatrix(1.25f))
+
+fun Modifier.brightness150(): Modifier = colorMatrixFilter(brightnessMatrix(1.50f))
+
+fun Modifier.brightness200(): Modifier = colorMatrixFilter(brightnessMatrix(2.00f))
+
+/**
+ * Tailwind's `contrast-*` filter scale (CSS `contrast(<amount>%)`): `(channel - 0.5) *
+ * amount + 0.5` in 0..1 space, i.e. a scale around the midpoint rather than around zero
+ * — expressed here in Compose's 0..255 [ColorMatrix] space as a scale plus translate.
+ */
+private fun contrastMatrix(amount: Float): ColorMatrix {
+    val translate = 127.5f * (1 - amount)
+    return ColorMatrix(
+        floatArrayOf(
+            amount,
+            0f,
+            0f,
+            0f,
+            translate,
+            0f,
+            amount,
+            0f,
+            0f,
+            translate,
+            0f,
+            0f,
+            amount,
+            0f,
+            translate,
+            0f,
+            0f,
+            0f,
+            1f,
+            0f,
+        ),
+    )
+}
+
+fun Modifier.contrast0(): Modifier = colorMatrixFilter(contrastMatrix(0.00f))
+
+fun Modifier.contrast50(): Modifier = colorMatrixFilter(contrastMatrix(0.50f))
+
+fun Modifier.contrast75(): Modifier = colorMatrixFilter(contrastMatrix(0.75f))
+
+fun Modifier.contrast100(): Modifier = colorMatrixFilter(contrastMatrix(1.00f))
+
+fun Modifier.contrast125(): Modifier = colorMatrixFilter(contrastMatrix(1.25f))
+
+fun Modifier.contrast150(): Modifier = colorMatrixFilter(contrastMatrix(1.50f))
+
+fun Modifier.contrast200(): Modifier = colorMatrixFilter(contrastMatrix(2.00f))
+
+/**
+ * Tailwind's `saturate-*` filter scale (CSS `saturate(<amount>%)`). [ColorMatrix
+ * .setToSaturation] already implements the exact same formula (0 = grayscale, 1 =
+ * identity, >1 = supersaturated) — the same matrix [grayscale] uses with `sat = 0f`.
+ */
+fun Modifier.saturate0(): Modifier = colorMatrixFilter(ColorMatrix().apply { setToSaturation(0.00f) })
+
+fun Modifier.saturate50(): Modifier = colorMatrixFilter(ColorMatrix().apply { setToSaturation(0.50f) })
+
+fun Modifier.saturate100(): Modifier = colorMatrixFilter(ColorMatrix().apply { setToSaturation(1.00f) })
+
+fun Modifier.saturate150(): Modifier = colorMatrixFilter(ColorMatrix().apply { setToSaturation(1.50f) })
+
+fun Modifier.saturate200(): Modifier = colorMatrixFilter(ColorMatrix().apply { setToSaturation(2.00f) })
 
 private fun Modifier.colorMatrixFilter(matrix: ColorMatrix): Modifier =
     this.drawWithContent {

@@ -1,7 +1,9 @@
 package io.github.ronjunevaldoz.tailwind.showcase.sections
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -10,6 +12,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -21,88 +27,128 @@ import io.github.ronjunevaldoz.shared.generated.resources.Res
 import io.github.ronjunevaldoz.shared.generated.resources.filter
 import io.github.ronjunevaldoz.tailwind.core.TwColors
 import io.github.ronjunevaldoz.tailwind.modifiers.blurSm
+import io.github.ronjunevaldoz.tailwind.modifiers.brightness150
+import io.github.ronjunevaldoz.tailwind.modifiers.contrast150
+import io.github.ronjunevaldoz.tailwind.modifiers.fontMedium
 import io.github.ronjunevaldoz.tailwind.modifiers.fontMono
 import io.github.ronjunevaldoz.tailwind.modifiers.gap2
 import io.github.ronjunevaldoz.tailwind.modifiers.gap4
 import io.github.ronjunevaldoz.tailwind.modifiers.grayscale
-import io.github.ronjunevaldoz.tailwind.modifiers.invert
+import io.github.ronjunevaldoz.tailwind.modifiers.p2
 import io.github.ronjunevaldoz.tailwind.modifiers.p4
+import io.github.ronjunevaldoz.tailwind.modifiers.saturate200
 import io.github.ronjunevaldoz.tailwind.modifiers.sepia
 import io.github.ronjunevaldoz.tailwind.modifiers.textSlate500
+import io.github.ronjunevaldoz.tailwind.modifiers.textSlate900
 import io.github.ronjunevaldoz.tailwind.modifiers.textXs
 import org.jetbrains.compose.resources.painterResource
 
-private val DEMO_WIDTH = 220.dp
-private val SWATCH_SIZE = 64.dp
+private val IMAGE_SIZE = 220.dp
+private val CHIP_ROW_WIDTH = 220.dp
 
 /**
- * blurSm/grayscale/invert/sepia applied to the same bundled photo -- a flat fill or plain
- * gradient doesn't sell what a filter does (grayscale on one color is just another color);
- * a real photo has the detail/contrast to make each filter visibly obvious. Bundled as a
- * compose resource rather than loaded over the network, so Roborazzi's captures stay
- * deterministic (no image-loading dependency, no fetch latency/failure to flake on).
+ * One shared photo in one container -- the filter row itself has no background/image of its
+ * own (`FilterChip` is plain text, "transparent"), it just picks which single filter modifier
+ * is currently applied to the one [Image] above. Matches Tailwind's own tailwindcss.com
+ * marketing-page filters demo: one photo, filter names next to/over it, not N independently
+ * filtered thumbnails side by side.
  */
+private enum class FilterOption(
+    val label: String,
+    val apply: Modifier.() -> Modifier,
+) {
+    NONE("none", { this }),
+    BLUR_SM("blurSm", { blurSm() }),
+    BRIGHTNESS_150("brightness150", { brightness150() }),
+    GRAYSCALE("grayscale", { grayscale() }),
+    CONTRAST_150("contrast150", { contrast150() }),
+    SATURATE_200("saturate200", { saturate200() }),
+    SEPIA("sepia", { sepia() }),
+}
+
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun FiltersShowcase() {
     ShowcaseSection(
-        title = "Filters — blurSm, grayscale, invert, sepia",
+        title = "Filters — blurSm, brightness150, grayscale, contrast150, saturate200, sepia",
         code =
             """
+            var selected by remember { mutableStateOf(FilterOption.BLUR_SM) }
+
+            Image(
+                painterResource(Res.drawable.filter),
+                null,
+                Modifier.size(220.dp).run(selected.apply),
+                contentScale = ContentScale.Crop,
+            )
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
-                horizontalArrangement = gap4(),
+                horizontalArrangement = gap2(),
             ) {
-                Image(painterResource(Res.drawable.filter), null, Modifier.size(64.dp).blurSm())
-                Image(painterResource(Res.drawable.filter), null, Modifier.size(64.dp).grayscale())
-                Image(painterResource(Res.drawable.filter), null, Modifier.size(64.dp).invert())
-                Image(painterResource(Res.drawable.filter), null, Modifier.size(64.dp).sepia())
+                // one tappable, transparent label per option -- tapping re-filters the image above
+                Text("blurSm", modifier = Modifier.clickable { selected = FilterOption.BLUR_SM })
+                Text("grayscale", modifier = Modifier.clickable { selected = FilterOption.GRAYSCALE })
+                // ...
             }
             """.trimIndent(),
     ) {
-        // Narrower than the row's natural content width so the scroll is actually
-        // demonstrated, not just theoretically present.
-        Row(
-            modifier =
-                Modifier
-                    .width(DEMO_WIDTH)
-                    .dotGridBackground()
-                    .horizontalScroll(rememberScrollState())
-                    .p4(),
-            horizontalArrangement = gap4(),
-        ) {
-            FilterSwatch("blurSm", Modifier.size(SWATCH_SIZE).blurSm())
-            FilterSwatch("grayscale", Modifier.size(SWATCH_SIZE).grayscale())
-            FilterSwatch("invert", Modifier.size(SWATCH_SIZE).invert())
-            FilterSwatch("sepia", Modifier.size(SWATCH_SIZE).sepia())
-        }
+        FilterCarousel()
     }
 }
 
 @Suppress("ktlint:standard:function-naming")
 @Composable
-private fun FilterSwatch(
-    label: String,
-    swatchModifier: Modifier,
-) {
-    Column(verticalArrangement = gap2()) {
-        Text(
-            label,
-            style =
-                MaterialTheme.typography.bodySmall
-                    .textXs()
-                    .fontMono()
-                    .textSlate500(),
-        )
-        // contentDescription = null -- decorative/repeated across all four swatches, the
-        // label above already names the filter for a11y purposes.
-        Image(
-            painter = painterResource(Res.drawable.filter),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = swatchModifier,
-        )
+fun FilterCarousel() {
+    var selected by remember { mutableStateOf(FilterOption.BLUR_SM) }
+
+    Column(verticalArrangement = gap4()) {
+        Box(modifier = Modifier.dotGridBackground().p4()) {
+            Image(
+                painter = painterResource(Res.drawable.filter),
+                contentDescription = "Photo with ${selected.label} filter applied",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(IMAGE_SIZE).run(selected.apply),
+            )
+        }
+
+        Row(
+            modifier =
+                Modifier
+                    .width(CHIP_ROW_WIDTH)
+                    .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = gap2(),
+        ) {
+            FilterOption.entries.forEach { option ->
+                FilterChip(
+                    option = option,
+                    isSelected = option == selected,
+                    onClick = { selected = option },
+                )
+            }
+        }
     }
+}
+
+/** A plain, background-less ("transparent") tappable label -- the filter row has no visual
+ * content of its own, it only ever selects which filter is applied to the shared [Image]
+ * in [FilterCarousel].
+ */
+@Suppress("ktlint:standard:function-naming")
+@Composable
+private fun FilterChip(
+    option: FilterOption,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    val baseStyle =
+        MaterialTheme.typography.bodySmall
+            .textXs()
+            .fontMono()
+    Text(
+        text = option.label,
+        style = if (isSelected) baseStyle.textSlate900().fontMedium() else baseStyle.textSlate500(),
+        modifier = Modifier.clickable(onClick = onClick).p2(),
+    )
 }
 
 private const val DOT_GRID_SPACING_DP = 12
