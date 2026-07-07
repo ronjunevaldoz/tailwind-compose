@@ -9,7 +9,7 @@ from tailwind_scale import GENERATED_HEADER, SPACING_SCALE, scale_suffix
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 MODIFIERS_PKG_DIR = os.path.join(
-    REPO_ROOT, "tailwind-layout", "src", "commonMain", "kotlin",
+    REPO_ROOT, "tailwind", "tailwind-layout", "src", "commonMain", "kotlin",
     "io", "github", "ronjunevaldoz", "tailwind", "modifiers",
 )
 

@@ -120,18 +120,22 @@ Android, iOS, Desktop (JVM), Web (JS + WasmJs).
 
 ## Modules
 
-- [`tailwind-core`](tailwind-core) — design tokens: `TwSpacing`, `TwColors` (OKLCH-based,
-  26 hues × 11 shades), `TwFontSize`/`TwLineHeight`/`TwFontWeight`/`TwTracking`, `TwRadius`,
-  `TwShadow`, `TwTransition` (duration/easing), `TwBreakpoint`
-- [`tailwind-layout`](tailwind-layout) — spacing, sizing, flex, grid, aspect-ratio,
+All six live under [`tailwind/`](tailwind) (kept on disk-only, via `projectDir` in
+`settings.gradle.kts` — Gradle project paths/task names are still flat, e.g. `:tailwind-core`):
+
+- [`tailwind-core`](tailwind/tailwind-core) — design tokens: `TwSpacing`, `TwColors`
+  (OKLCH-based, 26 hues × 11 shades), `TwFontSize`/`TwLineHeight`/`TwFontWeight`/`TwTracking`,
+  `TwRadius`, `TwShadow`, `TwTransition` (duration/easing), `TwBreakpoint`
+- [`tailwind-layout`](tailwind/tailwind-layout) — spacing, sizing, flex, grid, aspect-ratio,
   responsive breakpoints
-- [`tailwind-color`](tailwind-color) — background/text color, gradients, dark mode
-- [`tailwind-typography`](tailwind-typography) — font-size, line-height, font-weight,
+- [`tailwind-color`](tailwind/tailwind-color) — background/text color, gradients, dark mode
+- [`tailwind-typography`](tailwind/tailwind-typography) — font-size, line-height, font-weight,
   tracking, font-family
-- [`tailwind-effects`](tailwind-effects) — border, box-shadow, opacity, filters,
+- [`tailwind-effects`](tailwind/tailwind-effects) — border, box-shadow, opacity, filters,
   transitions, 3D transforms, the `twCard()` combinator
-- [`tailwind-compose`](tailwind-compose) — public facade module; depends on `tailwind-core`
-  and all four utility modules above, so most consumers only need this one dependency
+- [`tailwind-compose`](tailwind/tailwind-compose) — public facade module; depends on
+  `tailwind-core` and all four utility modules above, so most consumers only need this one
+  dependency
 - [`showcase`](showcase) — internal demo app rendering every utility category, used for
   visual verification via Roborazzi (not published)
 
