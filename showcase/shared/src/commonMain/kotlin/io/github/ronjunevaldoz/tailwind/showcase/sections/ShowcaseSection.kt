@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,12 +13,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import io.github.ronjunevaldoz.tailwind.core.TwRadius
 import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate100
 import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate900
-import io.github.ronjunevaldoz.tailwind.modifiers.bgWhite
 import io.github.ronjunevaldoz.tailwind.modifiers.fontBold
 import io.github.ronjunevaldoz.tailwind.modifiers.fontMedium
 import io.github.ronjunevaldoz.tailwind.modifiers.gap2
@@ -27,10 +23,10 @@ import io.github.ronjunevaldoz.tailwind.modifiers.p4
 import io.github.ronjunevaldoz.tailwind.modifiers.px3
 import io.github.ronjunevaldoz.tailwind.modifiers.py1
 import io.github.ronjunevaldoz.tailwind.modifiers.rounded
-import io.github.ronjunevaldoz.tailwind.modifiers.shadowSm
 import io.github.ronjunevaldoz.tailwind.modifiers.textLg
 import io.github.ronjunevaldoz.tailwind.modifiers.textSm
 import io.github.ronjunevaldoz.tailwind.modifiers.textWhite
+import io.github.ronjunevaldoz.tailwind.modifiers.twCard
 
 /**
  * Shared section wrapper used by every showcase category — a title, its live demo, and
@@ -47,19 +43,8 @@ fun ShowcaseSection(
     content: @Composable () -> Unit,
 ) {
     var showCode by remember { mutableStateOf(false) }
-    val cardShape = RoundedCornerShape(TwRadius.lg)
     Column(
-        // Shape-affecting modifiers must be ordered shadow -> clip -> background: a Compose
-        // shadow's halo is clipped by anything applied before it, and a background painted
-        // before a clip() ignores that clip entirely (it's drawn outside the clipped layer).
-        // shadowSm() also needs the same shape passed explicitly -- otherwise it casts a
-        // rectangular halo under this rounded card. See docs/tailwind-coverage-matrix.md.
-        modifier =
-            modifier
-                .shadowSm(cardShape)
-                .clip(cardShape)
-                .bgWhite()
-                .p4(),
+        modifier = modifier.twCard().p4(),
     ) {
         Text(
             text = title,

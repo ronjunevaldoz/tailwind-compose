@@ -94,6 +94,23 @@ Backed by `LocalWindowInfo.current.containerDpSize` (`currentTwWindowWidth()` in
 Tailwind's *different* `@container` concept) and not Material's `WindowSizeClass` (whose
 600dp/840dp breakpoints don't match Tailwind's 640/768/1024/1280/1536 scale in `TwBreakpoint`).
 
+## Card composition helper
+
+Tailwind has no single `card` utility class — `bg-white rounded-lg shadow-sm` is three
+independent classes, and CSS applies all three to the same box regardless of declaration
+order. Compose's `shadow()`/`clip()`/`background()` equivalents are order-*sensitive*
+instead: get it wrong and the shadow casts a rectangular halo under rounded content, or the
+background ignores the clip entirely (this bit `ShowcaseSection.kt` twice — see its commit
+history). `twCard()` exists purely to close that Compose-specific gap, not to model a
+Tailwind class, hence the `tw` prefix it shares with `twDark`/`twResponsive`:
+
+```kotlin
+Modifier.twCard(shape = RoundedCornerShape(TwRadius.lg), color = TwColors.white, shadowElevation = TwShadow.sm)
+```
+
+It threads one `Shape` through `shadow() -> clip() -> background()` in the required order
+instead of leaving callers to build and repeat it themselves. See `Card.kt`.
+
 ## Refreshing this matrix
 
 Re-run against a newer Tailwind release with:
