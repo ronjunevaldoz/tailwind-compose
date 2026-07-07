@@ -1,14 +1,18 @@
 package io.github.ronjunevaldoz.tailwind.showcase
 
+import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import io.github.ronjunevaldoz.tailwind.core.TwColors
 import org.junit.Rule
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * Clicks through a representative sample of sidebar categories (one utility-backed
@@ -65,5 +69,47 @@ class AppNavigationTest {
 
         composeTestRule.onNodeWithText("Preview").performClick()
         composeTestRule.onNode(hasText("bgSlate200", substring = true)).assertDoesNotExist()
+    }
+
+    @Test
+    fun topBar_showsGitHubLinkAndBreadcrumb_forTheSelectedCategory() {
+        composeTestRule.setContent {
+            App()
+        }
+
+        composeTestRule.onNodeWithText("GitHub ↗").assertIsDisplayed()
+        // Full breadcrumb text, not a "Spacing" substring match -- that also matches the
+        // sidebar item and the ShowcaseSection title, both of which contain "Spacing" too.
+        composeTestRule.onNodeWithText("Showcase / Spacing").assertIsDisplayed()
+    }
+
+    @Test
+    fun darkModeToggle_reThemesTheAppShell() {
+        composeTestRule.setContent {
+            App()
+        }
+
+        val beforePixel =
+            composeTestRule
+                .onNodeWithTag(APP_ROOT_TEST_TAG)
+                .captureToImage()
+                .toPixelMap()[APP_ROOT_BG_PROBE_X, APP_ROOT_BG_PROBE_Y]
+        assertEquals(TwColors.white, beforePixel, "expected the light-mode default before toggling")
+
+        composeTestRule.onNodeWithTag(DARK_MODE_TOGGLE_TEST_TAG).performClick()
+
+        val afterPixel =
+            composeTestRule
+                .onNodeWithTag(APP_ROOT_TEST_TAG)
+                .captureToImage()
+                .toPixelMap()[APP_ROOT_BG_PROBE_X, APP_ROOT_BG_PROBE_Y]
+        assertEquals(TwColors.slate900, afterPixel, "expected the app shell to switch to dark mode")
+    }
+
+    private companion object {
+        // A pixel inside the TopBar's own background, away from any text/icon/switch --
+        // the TopBar is the outermost themed surface directly under the app-root node.
+        const val APP_ROOT_BG_PROBE_X = 5
+        const val APP_ROOT_BG_PROBE_Y = 5
     }
 }

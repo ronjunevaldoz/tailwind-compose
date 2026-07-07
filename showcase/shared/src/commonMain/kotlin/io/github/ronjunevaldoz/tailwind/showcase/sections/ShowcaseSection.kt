@@ -15,6 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate100
+import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate700
+import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate800
 import io.github.ronjunevaldoz.tailwind.modifiers.bgSlate900
 import io.github.ronjunevaldoz.tailwind.modifiers.fontBold
 import io.github.ronjunevaldoz.tailwind.modifiers.fontMedium
@@ -27,6 +29,7 @@ import io.github.ronjunevaldoz.tailwind.modifiers.textLg
 import io.github.ronjunevaldoz.tailwind.modifiers.textSm
 import io.github.ronjunevaldoz.tailwind.modifiers.textWhite
 import io.github.ronjunevaldoz.tailwind.modifiers.twCard
+import io.github.ronjunevaldoz.tailwind.modifiers.twDark
 
 /**
  * Shared section wrapper used by every showcase category — a title, its live demo, and
@@ -44,14 +47,15 @@ fun ShowcaseSection(
 ) {
     var showCode by remember { mutableStateOf(false) }
     Column(
-        modifier = modifier.twCard().p4(),
+        modifier = modifier.twCard().twDark { bgSlate800() }.p4(),
     ) {
         Text(
             text = title,
             style =
                 MaterialTheme.typography.bodyLarge
                     .textLg()
-                    .fontBold(),
+                    .fontBold()
+                    .twDark { textWhite() },
         )
         if (code != null) {
             Spacer(Modifier.height(8.dp))
@@ -82,11 +86,11 @@ private fun SectionTab(
             MaterialTheme.typography.bodyMedium
                 .textSm()
                 .fontMedium()
-                .let { if (selected) it.textWhite() else it },
+                .let { if (selected) it.textWhite() else it.twDark { textWhite() } },
         modifier =
             Modifier
                 .rounded()
-                .let { if (selected) it.bgSlate900() else it.bgSlate100() }
+                .let { if (selected) it.bgSlate900() else it.bgSlate100().twDark { bgSlate700() } }
                 .clickable(onClick = onClick)
                 .px3()
                 .py1(),
