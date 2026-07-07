@@ -73,7 +73,11 @@ Modifier.bgWhite().twDark { bgSlate900() }
 TextStyle().textSlate900().twDark { textSlate50() }
 ```
 
-`isTwDarkTheme()` wraps Compose's `isSystemInDarkTheme()`. See `DarkMode.kt`.
+`isTwDarkTheme()` wraps Compose's `isSystemInDarkTheme()`, checking `LocalTwDarkTheme` first
+so `@Preview`s and tests can force a theme (`CompositionLocalProvider(LocalTwDarkTheme provides
+true) { ... }`) — there is otherwise no cross-platform way to force dark mode in a test harness
+(the JVM/Desktop harness always reports light mode). Defaults to `null`, deferring to the
+system setting. See `DarkMode.kt`.
 
 ## Responsive design
 

@@ -2,17 +2,34 @@ package io.github.ronjunevaldoz.tailwind.modifiers
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 
 /**
+ * Overrides [isTwDarkTheme] when non-null; `null` (the default) defers to
+ * [isSystemInDarkTheme]. Provide a value to force a theme for `@Preview`s or tests --
+ * there is otherwise no cross-platform way to force dark mode in a test harness (the
+ * JVM/Desktop harness always reports light mode with no override available):
+ *
+ * ```
+ * CompositionLocalProvider(LocalTwDarkTheme provides true) {
+ *     // isTwDarkTheme() is true here regardless of the actual system setting
+ * }
+ * ```
+ */
+val LocalTwDarkTheme: ProvidableCompositionLocal<Boolean?> = compositionLocalOf { null }
+
+/**
  * Whether the system is currently in dark mode — the same signal Tailwind's `dark:`
- * variant reacts to by default (the `media` dark-mode strategy). Thin wrapper over
- * [isSystemInDarkTheme] so call sites read `if (isTwDarkTheme())` instead of mixing
- * Compose Foundation calls into tailwind-compose usage.
+ * variant reacts to by default (the `media` dark-mode strategy). Reads [LocalTwDarkTheme]
+ * first so callers can force a theme; falls back to [isSystemInDarkTheme] otherwise, so
+ * call sites read `if (isTwDarkTheme())` instead of mixing Compose Foundation calls into
+ * tailwind-compose usage.
  */
 @Composable
-fun isTwDarkTheme(): Boolean = isSystemInDarkTheme()
+fun isTwDarkTheme(): Boolean = LocalTwDarkTheme.current ?: isSystemInDarkTheme()
 
 /**
  * Tailwind's `dark:` variant for [Modifier] chains — applies [block] only when
