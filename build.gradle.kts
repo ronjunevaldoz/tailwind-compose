@@ -77,7 +77,16 @@ subprojects {
 
     extensions.configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
         publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
-        signAllPublications()
+
+        // Only sign when an in-memory GPG key is actually available (release.yml sets
+        // ORG_GRADLE_PROJECT_signingInMemoryKey, which Gradle exposes here as this
+        // project property) -- otherwise publishToMavenLocal fails on every dev machine
+        // with "no configured signatory" even though local smoke-testing doesn't need a
+        // real signature. The real Maven Central publish in CI still gets signed, since
+        // that's exactly when this property is set.
+        if (providers.gradleProperty("signingInMemoryKey").isPresent) {
+            signAllPublications()
+        }
 
         coordinates(
             groupId = providers.gradleProperty("GROUP").get(),
