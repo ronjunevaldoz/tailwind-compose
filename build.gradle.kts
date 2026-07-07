@@ -58,9 +58,16 @@ allprojects {
 val publishedModuleDescriptions =
     mapOf(
         "tailwind-core" to "Design tokens (spacing, color, typography, radius) for tailwind-compose.",
-        "tailwind-modifiers" to "Tailwind-style Modifier extension functions for Compose Multiplatform.",
+        "tailwind-layout" to "Tailwind-style spacing, sizing, flex, grid, aspect-ratio, and " +
+            "responsive-breakpoint Modifier extensions for Compose Multiplatform.",
+        "tailwind-color" to "Tailwind-style background/text color, gradient, and dark-mode " +
+            "Modifier/TextStyle extensions for Compose Multiplatform.",
+        "tailwind-typography" to "Tailwind-style font-size, line-height, font-weight, tracking, " +
+            "and font-family TextStyle extensions for Compose Multiplatform.",
+        "tailwind-effects" to "Tailwind-style border, box-shadow, opacity, filter, transition, " +
+            "and 3D transform Modifier extensions for Compose Multiplatform.",
         "tailwind-compose" to "Tailwind CSS-inspired utilities for Compose Multiplatform " +
-            "(facade module — depends on tailwind-core + tailwind-modifiers).",
+            "(facade module — depends on tailwind-core + tailwind-layout/color/typography/effects).",
     )
 
 subprojects {

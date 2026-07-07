@@ -33,7 +33,10 @@ plugins {
 }
 
 include(":tailwind-core")
-include(":tailwind-modifiers")
+include(":tailwind-layout")
+include(":tailwind-color")
+include(":tailwind-typography")
+include(":tailwind-effects")
 include(":tailwind-compose")
 include(":showcase:shared")
 include(":showcase:androidApp")

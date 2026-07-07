@@ -12,12 +12,17 @@ complexity:
   CyclomaticComplexMethod:
     active: true
     threshold: 15
-  # tailwind-modifiers is code-generated utility-scale functions (spacing, sizing,
-  # color, typography, border extensions) — hundreds of one-line functions per file
-  # by design, not a code smell. Excluded from the function-count check entirely.
+  # The tailwind-{layout,color,typography,effects} modules are code-generated
+  # utility-scale functions (spacing, sizing, color, typography, border extensions)
+  # — hundreds of one-line functions per file by design, not a code smell. Excluded
+  # from the function-count check entirely.
   TooManyFunctions:
     active: true
-    excludes: ['**/tailwind-modifiers/**']
+    excludes:
+      - '**/tailwind-layout/**'
+      - '**/tailwind-color/**'
+      - '**/tailwind-typography/**'
+      - '**/tailwind-effects/**'
 
 naming:
   FunctionNaming:
@@ -26,12 +31,18 @@ naming:
     ignoreAnnotated: ['Composable', 'Preview']
 
 style:
-  # tailwind-modifiers/tailwind-core are literally tables of Tailwind's own
-  # numeric scale values (spacing dp, opacity %, aspect ratios, OKLCH components)
-  # — the numbers ARE the content, not magic constants standing in for meaning.
+  # tailwind-{layout,color,typography,effects}/tailwind-core are literally tables of
+  # Tailwind's own numeric scale values (spacing dp, opacity %, aspect ratios, OKLCH
+  # components) — the numbers ARE the content, not magic constants standing in for meaning.
   MagicNumber:
     active: true
-    excludes: ['**/tailwind-modifiers/**', '**/tailwind-core/**', '**/build/**']
+    excludes:
+      - '**/tailwind-layout/**'
+      - '**/tailwind-color/**'
+      - '**/tailwind-typography/**'
+      - '**/tailwind-effects/**'
+      - '**/tailwind-core/**'
+      - '**/build/**'
   # @Preview-annotated composables are invoked by Android Studio/preview tooling,
   # not by our own code, so Detekt can't see the call site.
   UnusedPrivateMember:

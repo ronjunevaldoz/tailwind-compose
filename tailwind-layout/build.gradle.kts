@@ -2,13 +2,10 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    // No Compose Multiplatform/Compiler plugins here — this facade module has zero
-    // Compose code of its own (see TailwindCompose.kt), it only re-exports
-    // tailwind-core and the four tailwind-{layout,color,typography,effects} modules
-    // via api(). Applying the Compose Compiler plugin without compose.runtime on this
-    // module's own classpath breaks compilation.
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
@@ -27,7 +24,7 @@ kotlin {
     }
 
     androidLibrary {
-        namespace = "io.github.ronjunevaldoz.tailwind"
+        namespace = "io.github.ronjunevaldoz.tailwind.layout"
         compileSdk =
             libs.versions.android.compileSdk
                 .get()
@@ -44,16 +41,17 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            // Facade module: consumers depend on this single artifact
-            // to get design tokens and every utility category.
             api(projects.tailwindCore)
-            api(projects.tailwindLayout)
-            api(projects.tailwindColor)
-            api(projects.tailwindTypography)
-            api(projects.tailwindEffects)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.foundation)
+            implementation(compose.animation)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        jvmTest.dependencies {
+            implementation(compose.desktop.uiTestJUnit4)
+            implementation(compose.desktop.currentOs)
         }
     }
 }

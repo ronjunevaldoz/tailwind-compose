@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates tailwind-modifiers/.../Spacing.kt from tailwind_scale.py.
+"""Generates tailwind-layout/.../Spacing.kt from tailwind_scale.py.
 
 Run from repo root: python3 scripts/codegen/generate_spacing_modifiers.py
 """
@@ -9,7 +9,7 @@ from tailwind_scale import GENERATED_HEADER, SPACING_SCALE, scale_suffix
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 MODIFIERS_PKG_DIR = os.path.join(
-    REPO_ROOT, "tailwind-modifiers", "src", "commonMain", "kotlin",
+    REPO_ROOT, "tailwind-layout", "src", "commonMain", "kotlin",
     "io", "github", "ronjunevaldoz", "tailwind", "modifiers",
 )
 

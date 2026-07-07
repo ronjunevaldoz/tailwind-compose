@@ -46,7 +46,7 @@ Status legend:
 | **Tables** | border-collapse, border-spacing, table-layout, caption-side | ⬜ | Not planned — Compose has no HTML-table layout primitive; would map to a custom grid composable, out of scope for a Modifier library |
 | **SVG** | fill, stroke, stroke-width | ⬜ | Not planned — Compose styles vector art via `Painter`/`ImageVector` properties, not `Modifier`; different API shape entirely |
 | **Accessibility** | forced-color-adjust | ⬜ | Not planned — Compose's accessibility story is `Modifier.semantics`/`contentDescription`, unrelated to this CSS media-query concept |
-| **Responsive design** | `sm:`/`md:`/`lg:`/`xl:`/`2xl:` breakpoints | ✅ | Post-MVP — `TwBreakpoint` (tailwind-core, exact 640/768/1024/1280/1536dp match for `--breakpoint-*`) + `twResponsive()` (tailwind-modifiers), a value-resolver rather than a chainable variant — see "Responsive design" section below for why |
+| **Responsive design** | `sm:`/`md:`/`lg:`/`xl:`/`2xl:` breakpoints | ✅ | Post-MVP — `TwBreakpoint` (tailwind-core, exact 640/768/1024/1280/1536dp match for `--breakpoint-*`) + `twResponsive()` (tailwind-layout), a value-resolver rather than a chainable variant — see "Responsive design" section below for why |
 
 ## Summary
 

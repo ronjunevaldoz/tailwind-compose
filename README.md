@@ -123,10 +123,15 @@ Android, iOS, Desktop (JVM), Web (JS + WasmJs).
 - [`tailwind-core`](tailwind-core) — design tokens: `TwSpacing`, `TwColors` (OKLCH-based,
   26 hues × 11 shades), `TwFontSize`/`TwLineHeight`/`TwFontWeight`/`TwTracking`, `TwRadius`,
   `TwShadow`, `TwTransition` (duration/easing), `TwBreakpoint`
-- [`tailwind-modifiers`](tailwind-modifiers) — `Modifier`/`TextStyle` extension functions
-  built on those tokens
-- [`tailwind-compose`](tailwind-compose) — public facade module; most consumers depend on
-  this one only
+- [`tailwind-layout`](tailwind-layout) — spacing, sizing, flex, grid, aspect-ratio,
+  responsive breakpoints
+- [`tailwind-color`](tailwind-color) — background/text color, gradients, dark mode
+- [`tailwind-typography`](tailwind-typography) — font-size, line-height, font-weight,
+  tracking, font-family
+- [`tailwind-effects`](tailwind-effects) — border, box-shadow, opacity, filters,
+  transitions, 3D transforms, the `twCard()` combinator
+- [`tailwind-compose`](tailwind-compose) — public facade module; depends on `tailwind-core`
+  and all four utility modules above, so most consumers only need this one dependency
 - [`showcase`](showcase) — internal demo app rendering every utility category, used for
   visual verification via Roborazzi (not published)
 

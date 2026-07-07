@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates tailwind-modifiers/.../Color.kt from tailwind_scale.py.
+"""Generates tailwind-color/.../Color.kt from tailwind_scale.py.
 
 Run from repo root: python3 scripts/codegen/generate_color_modifiers.py
 """
@@ -9,7 +9,7 @@ from tailwind_scale import COLOR_PALETTE_OKLCH, GENERATED_HEADER
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 MODIFIERS_PKG_DIR = os.path.join(
-    REPO_ROOT, "tailwind-modifiers", "src", "commonMain", "kotlin",
+    REPO_ROOT, "tailwind-color", "src", "commonMain", "kotlin",
     "io", "github", "ronjunevaldoz", "tailwind", "modifiers",
 )
 

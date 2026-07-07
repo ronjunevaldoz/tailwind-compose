@@ -26,7 +26,7 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Build all publishable modules
-        run: ./gradlew :tailwind-core:build :tailwind-modifiers:build :tailwind-compose:build
+        run: ./gradlew :tailwind-core:build :tailwind-layout:build :tailwind-color:build :tailwind-typography:build :tailwind-effects:build :tailwind-compose:build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -34,7 +34,10 @@ jobs:
           name: tailwind-compose-${{ github.ref_name }}
           path: |
             tailwind-core/build/outputs/
-            tailwind-modifiers/build/outputs/
+            tailwind-layout/build/outputs/
+            tailwind-color/build/outputs/
+            tailwind-typography/build/outputs/
+            tailwind-effects/build/outputs/
             tailwind-compose/build/outputs/
           retention-days: 30
 
@@ -70,8 +73,32 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
 
-      - name: Publish and release tailwind-modifiers
-        run: ./gradlew :tailwind-modifiers:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
+      - name: Publish and release tailwind-layout
+        run: ./gradlew :tailwind-layout:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
+
+      - name: Publish and release tailwind-color
+        run: ./gradlew :tailwind-color:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
+
+      - name: Publish and release tailwind-typography
+        run: ./gradlew :tailwind-typography:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
+
+      - name: Publish and release tailwind-effects
+        run: ./gradlew :tailwind-effects:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
