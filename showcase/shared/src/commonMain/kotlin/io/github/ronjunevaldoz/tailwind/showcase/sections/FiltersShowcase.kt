@@ -1,8 +1,7 @@
 package io.github.ronjunevaldoz.tailwind.showcase.sections
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -15,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.github.ronjunevaldoz.shared.generated.resources.Res
+import io.github.ronjunevaldoz.shared.generated.resources.filter
 import io.github.ronjunevaldoz.tailwind.core.TwColors
-import io.github.ronjunevaldoz.tailwind.modifiers.bgGradientToR
 import io.github.ronjunevaldoz.tailwind.modifiers.blurSm
 import io.github.ronjunevaldoz.tailwind.modifiers.fontMono
 import io.github.ronjunevaldoz.tailwind.modifiers.gap2
@@ -29,24 +30,18 @@ import io.github.ronjunevaldoz.tailwind.modifiers.p4
 import io.github.ronjunevaldoz.tailwind.modifiers.sepia
 import io.github.ronjunevaldoz.tailwind.modifiers.textSlate500
 import io.github.ronjunevaldoz.tailwind.modifiers.textXs
+import org.jetbrains.compose.resources.painterResource
 
 private val DEMO_WIDTH = 220.dp
+private val SWATCH_SIZE = 64.dp
 
-// A flat fill doesn't show what a filter actually does -- grayscale on a single color is
-// just a different single color. A multi-stop gradient has the color/luminance variation
-// needed to make blur/grayscale/invert/sepia visibly do something, without a network image
-// (bad for Roborazzi's deterministic-render requirement) or a bundled asset.
-private val DEMO_SWATCH_COLORS =
-    listOf(
-        TwColors.pink500,
-        TwColors.orange500,
-        TwColors.yellow400,
-        TwColors.emerald500,
-        TwColors.blue500,
-        TwColors.violet500,
-    )
-
-/** blurSm/grayscale/invert/sepia over the same multi-color gradient fill. */
+/**
+ * blurSm/grayscale/invert/sepia applied to the same bundled photo -- a flat fill or plain
+ * gradient doesn't sell what a filter does (grayscale on one color is just another color);
+ * a real photo has the detail/contrast to make each filter visibly obvious. Bundled as a
+ * compose resource rather than loaded over the network, so Roborazzi's captures stay
+ * deterministic (no image-loading dependency, no fetch latency/failure to flake on).
+ */
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun FiltersShowcase() {
@@ -54,17 +49,14 @@ fun FiltersShowcase() {
         title = "Filters — blurSm, grayscale, invert, sepia",
         code =
             """
-            val colors = listOf(TwColors.pink500, TwColors.orange500, TwColors.yellow400,
-                TwColors.emerald500, TwColors.blue500, TwColors.violet500)
-
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
                 horizontalArrangement = gap4(),
             ) {
-                Box(Modifier.size(40.dp).blurSm().background(bgGradientToR(colors)))
-                Box(Modifier.size(40.dp).grayscale().background(bgGradientToR(colors)))
-                Box(Modifier.size(40.dp).invert().background(bgGradientToR(colors)))
-                Box(Modifier.size(40.dp).sepia().background(bgGradientToR(colors)))
+                Image(painterResource(Res.drawable.filter), null, Modifier.size(64.dp).blurSm())
+                Image(painterResource(Res.drawable.filter), null, Modifier.size(64.dp).grayscale())
+                Image(painterResource(Res.drawable.filter), null, Modifier.size(64.dp).invert())
+                Image(painterResource(Res.drawable.filter), null, Modifier.size(64.dp).sepia())
             }
             """.trimIndent(),
     ) {
@@ -79,11 +71,10 @@ fun FiltersShowcase() {
                     .p4(),
             horizontalArrangement = gap4(),
         ) {
-            val gradient = bgGradientToR(DEMO_SWATCH_COLORS)
-            FilterSwatch("blurSm", Modifier.size(40.dp).blurSm().background(gradient))
-            FilterSwatch("grayscale", Modifier.size(40.dp).grayscale().background(gradient))
-            FilterSwatch("invert", Modifier.size(40.dp).invert().background(gradient))
-            FilterSwatch("sepia", Modifier.size(40.dp).sepia().background(gradient))
+            FilterSwatch("blurSm", Modifier.size(SWATCH_SIZE).blurSm())
+            FilterSwatch("grayscale", Modifier.size(SWATCH_SIZE).grayscale())
+            FilterSwatch("invert", Modifier.size(SWATCH_SIZE).invert())
+            FilterSwatch("sepia", Modifier.size(SWATCH_SIZE).sepia())
         }
     }
 }
@@ -103,7 +94,14 @@ private fun FilterSwatch(
                     .fontMono()
                     .textSlate500(),
         )
-        Box(swatchModifier)
+        // contentDescription = null -- decorative/repeated across all four swatches, the
+        // label above already names the filter for a11y purposes.
+        Image(
+            painter = painterResource(Res.drawable.filter),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = swatchModifier,
+        )
     }
 }
 
