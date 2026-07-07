@@ -1,11 +1,21 @@
 # tailwind-compose
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.ronjunevaldoz/tailwind-compose)](https://search.maven.org/artifact/io.github.ronjunevaldoz/tailwind-compose)
+[![CI](https://github.com/ronjunevaldoz/tailwind-compose/actions/workflows/ci.yml/badge.svg)](https://github.com/ronjunevaldoz/tailwind-compose/actions/workflows/ci.yml)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.4.0-blue.svg?logo=kotlin)](https://kotlinlang.org)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.11.1-blue.svg)](https://www.jetbrains.com/lp/compose-multiplatform/)
+![Platforms](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20JVM%20%7C%20JS%20%7C%20Wasm-blue.svg)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 Tailwind CSS-inspired, type-safe Kotlin extension functions for Compose Multiplatform
 `Modifier` and `TextStyle` — spacing, sizing, color, typography, borders, opacity,
 aspect-ratio, box-shadow, gradients, grid, filters, transitions, 3D transforms, flex
 alignment, dark mode, and responsive breakpoints, generated from Tailwind v4's actual
 token values. See [docs/tailwind-coverage-matrix.md](docs/tailwind-coverage-matrix.md)
 for the exact utility-by-utility status.
+
+**[Live showcase](https://ronjunevaldoz.github.io/tailwind-compose/)** — every utility
+category, rendered live in the browser via Kotlin/Wasm.
 
 ## Install
 
