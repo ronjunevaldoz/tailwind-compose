@@ -9,7 +9,7 @@ from tailwind_scale import COLOR_PALETTE_OKLCH, GENERATED_HEADER
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 MODIFIERS_PKG_DIR = os.path.join(
-    REPO_ROOT, "tailwind", "tailwind-color", "src", "commonMain", "kotlin",
+    REPO_ROOT, "tailwind", "color", "src", "commonMain", "kotlin",
     "io", "github", "ronjunevaldoz", "tailwind", "modifiers",
 )
 

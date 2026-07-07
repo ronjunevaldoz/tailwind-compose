@@ -33,12 +33,12 @@ jobs:
         with:
           name: tailwind-compose-${{ github.ref_name }}
           path: |
-            tailwind/tailwind-core/build/outputs/
-            tailwind/tailwind-layout/build/outputs/
-            tailwind/tailwind-color/build/outputs/
-            tailwind/tailwind-typography/build/outputs/
-            tailwind/tailwind-effects/build/outputs/
-            tailwind/tailwind-compose/build/outputs/
+            tailwind/core/build/outputs/
+            tailwind/layout/build/outputs/
+            tailwind/color/build/outputs/
+            tailwind/typography/build/outputs/
+            tailwind/effects/build/outputs/
+            tailwind/compose/build/outputs/
           retention-days: 30
 
   # ─── Publish to Maven Central ───────────────────────────────────────────────
