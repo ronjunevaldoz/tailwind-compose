@@ -1,8 +1,11 @@
 # tailwind-compose
 
 Tailwind CSS-inspired, type-safe Kotlin extension functions for Compose Multiplatform
-`Modifier` and `TextStyle` — spacing, sizing, color, typography, borders, opacity, and
-aspect-ratio utilities, generated from Tailwind v4's actual token values.
+`Modifier` and `TextStyle` — spacing, sizing, color, typography, borders, opacity,
+aspect-ratio, box-shadow, gradients, grid, filters, transitions, 3D transforms, flex
+alignment, dark mode, and responsive breakpoints, generated from Tailwind v4's actual
+token values. See [docs/tailwind-coverage-matrix.md](docs/tailwind-coverage-matrix.md)
+for the exact utility-by-utility status.
 
 ## Install
 
@@ -59,8 +62,24 @@ Modifier.border4(TwColors.blue500).roundedFull()
 Modifier.bgBlue500().opacity50()
 ```
 
-Rule of thumb: **effect modifiers (`bg`/`rounded`/`opacity`/`border`) go first in the chain**,
-sizing/padding modifiers go after.
+Rule of thumb: **effect modifiers (`bg`/`rounded`/`opacity`/`border`/`shadow`) go first in the
+chain**, sizing/padding modifiers go after. For a card (shadow + rounded corners + background
+together), use [`twCard()`](#card-composition-helper) instead of composing the three yourself —
+it's easy to get the order subtly wrong (e.g. a rounded card with a square-cornered shadow
+underneath it).
+
+### Card composition helper
+
+Tailwind has no single `card` utility class — `bg-white rounded-lg shadow-sm` is three
+independent CSS classes that apply to the same box regardless of order. `twCard()` exists
+because the Compose equivalents (`shadow()`/`clip()`/`background()`) are order-sensitive
+instead, threading one `Shape` through all three in the one order that keeps them visually
+consistent:
+
+```kotlin
+Modifier.twCard(shape = RoundedCornerShape(TwRadius.lg), color = TwColors.white, shadowElevation = TwShadow.sm)
+Modifier.twCard() // same defaults as above
+```
 
 ### Dark mode
 
@@ -73,7 +92,27 @@ Text("Hello", style = TextStyle().textSlate900().twDark { textSlate50() })
 ```
 
 `twDark { }` applies its block only when `isTwDarkTheme()` (a thin wrapper over Compose's
-`isSystemInDarkTheme()`) is true, otherwise the chain passes through unchanged.
+`isSystemInDarkTheme()`) is true, otherwise the chain passes through unchanged. Override
+`LocalTwDarkTheme` to force a theme in `@Preview`s or tests — there's otherwise no
+cross-platform way to force dark mode in a test harness:
+
+```kotlin
+CompositionLocalProvider(LocalTwDarkTheme provides true) { /* isTwDarkTheme() is true here */ }
+```
+
+### Responsive design
+
+Tailwind's `sm:`/`md:`/`lg:`/`xl:`/`2xl:` breakpoints are cumulative `min-width` matches, not
+a binary switch like `dark:`, so this is a value-resolver rather than a chainable variant —
+it picks one value up front, mobile-first, largest-matching-breakpoint-wins:
+
+```kotlin
+Modifier.padding(twResponsive(base = TwSpacing.scale4, md = TwSpacing.scale6, lg = TwSpacing.scale8))
+val columns = twResponsive(base = 2, sm = 3, md = 4, lg = 6, xl = 8)
+```
+
+Backed by the actual window/viewport width (`currentTwWindowWidth()`), matching Tailwind's
+exact 640/768/1024/1280/1536dp breakpoint scale (`TwBreakpoint`).
 
 ## Platforms
 
@@ -82,16 +121,14 @@ Android, iOS, Desktop (JVM), Web (JS + WasmJs).
 ## Modules
 
 - [`tailwind-core`](tailwind-core) — design tokens: `TwSpacing`, `TwColors` (OKLCH-based,
-  26 hues × 11 shades), `TwFontSize`/`TwLineHeight`/`TwFontWeight`/`TwTracking`, `TwRadius`
+  26 hues × 11 shades), `TwFontSize`/`TwLineHeight`/`TwFontWeight`/`TwTracking`, `TwRadius`,
+  `TwShadow`, `TwTransition` (duration/easing), `TwBreakpoint`
 - [`tailwind-modifiers`](tailwind-modifiers) — `Modifier`/`TextStyle` extension functions
   built on those tokens
 - [`tailwind-compose`](tailwind-compose) — public facade module; most consumers depend on
   this one only
 - [`showcase`](showcase) — internal demo app rendering every utility category, used for
   visual verification via Roborazzi (not published)
-
-See [docs/tailwind-coverage-matrix.md](docs/tailwind-coverage-matrix.md) for exactly which
-Tailwind utility categories are covered, planned, or intentionally out of scope.
 
 ## Build
 
