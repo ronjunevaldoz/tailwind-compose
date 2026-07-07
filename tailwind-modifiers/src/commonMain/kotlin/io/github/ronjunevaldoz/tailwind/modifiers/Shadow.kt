@@ -2,23 +2,29 @@ package io.github.ronjunevaldoz.tailwind.modifiers
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import io.github.ronjunevaldoz.tailwind.core.TwShadow
 
 /**
  * Tailwind's `shadow-*` elevation utilities (see [TwShadow] for the approximation
  * caveat). Like [Modifier.clip]/[Modifier.background], these must precede the
  * modifiers whose bounds they should wrap (e.g. `Modifier.shadowLg().roundedLg().bgWhite()`).
+ *
+ * Pass the same [Shape] used for the accompanying `rounded*()`/`clip()` call as [shape] --
+ * otherwise the shadow casts a rectangular halo under rounded content, visible as extra
+ * shadow bleeding past the rounded corners (mirrors the `shape` param on [Modifier.border]).
  */
-fun Modifier.shadowNone(): Modifier = this.shadow(TwShadow.none)
+fun Modifier.shadowNone(shape: Shape = RectangleShape): Modifier = this.shadow(TwShadow.none, shape)
 
-fun Modifier.shadowSm(): Modifier = this.shadow(TwShadow.sm)
+fun Modifier.shadowSm(shape: Shape = RectangleShape): Modifier = this.shadow(TwShadow.sm, shape)
 
-fun Modifier.shadow(): Modifier = this.shadow(TwShadow.base)
+fun Modifier.shadow(shape: Shape = RectangleShape): Modifier = this.shadow(TwShadow.base, shape)
 
-fun Modifier.shadowMd(): Modifier = this.shadow(TwShadow.md)
+fun Modifier.shadowMd(shape: Shape = RectangleShape): Modifier = this.shadow(TwShadow.md, shape)
 
-fun Modifier.shadowLg(): Modifier = this.shadow(TwShadow.lg)
+fun Modifier.shadowLg(shape: Shape = RectangleShape): Modifier = this.shadow(TwShadow.lg, shape)
 
-fun Modifier.shadowXl(): Modifier = this.shadow(TwShadow.xl)
+fun Modifier.shadowXl(shape: Shape = RectangleShape): Modifier = this.shadow(TwShadow.xl, shape)
 
-fun Modifier.shadowXl2(): Modifier = this.shadow(TwShadow.xl2)
+fun Modifier.shadowXl2(shape: Shape = RectangleShape): Modifier = this.shadow(TwShadow.xl2, shape)
