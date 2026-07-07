@@ -115,6 +115,23 @@ Modifier.twCard(shape = RoundedCornerShape(TwRadius.lg), color = TwColors.white,
 It threads one `Shape` through `shadow() -> clip() -> background()` in the required order
 instead of leaving callers to build and repeat it themselves. See `Card.kt`.
 
+## Compose Styles API — not used
+
+Jetpack Compose has a real, distinct **Styles API** (`Style`/`StyleScope`/`StyleState`,
+`@ExperimentalStylesApi`, documented at `developer.android.com/develop/ui/compose/styles`) —
+a CSS-style-like mechanism for defining state-based visual properties (padding, background,
+border, ...) as a single reusable object, separate from `TextStyle`. This library does not
+use it, for one concrete reason: **it requires Compose 1.12.0-alpha03 or later**, and this
+project is pinned to Compose Multiplatform 1.11.1 (stable) — confirmed by searching the
+actual 1.11.1 source jars for `ExperimentalStylesApi`, with zero matches anywhere in
+`androidx.compose.foundation`/`ui`. It's also still experimental/alpha upstream, which alone
+would be a reason to hold off adopting it into a library targeting a stable release. This is
+unrelated to `tailwind-compose`'s own colloquial "Style API" terminology used elsewhere in
+this project (the `TextStyle`-returning function family — `textSm()`, `fontBold()`,
+`text(color: Color)`, etc.) — that's this library's own established, deliberately-chosen
+naming, not a reference to the AndroidX feature above. Revisit once the project's pinned
+Compose Multiplatform version reaches parity with 1.12.0-alpha03+ and the API stabilizes.
+
 ## Refreshing this matrix
 
 Re-run against a newer Tailwind release with:
