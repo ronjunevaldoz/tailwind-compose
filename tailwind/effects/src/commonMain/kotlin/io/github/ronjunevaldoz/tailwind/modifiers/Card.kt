@@ -25,7 +25,7 @@ import io.github.ronjunevaldoz.tailwind.core.TwShadow
 fun Modifier.twCard(
     shape: Shape = RoundedCornerShape(TwRadius.lg),
     color: Color = TwColors.white,
-    shadowElevation: Dp = TwShadow.sm,
+    shadowElevation: Dp = TwShadow.xs,
 ): Modifier =
     this
         .shadow(shadowElevation, shape)

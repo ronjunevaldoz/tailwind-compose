@@ -56,8 +56,16 @@ fun Modifier.border8(
 /** Tailwind's `rounded-*` corner-radius utilities. */
 fun Modifier.roundedNone(): Modifier = this.clip(RoundedCornerShape(TwRadius.none))
 
+/** v4's `rounded-xs`. Was `roundedSm()` in v3 (see [roundedSm]'s deprecation note). */
+fun Modifier.roundedXs(): Modifier = this.clip(RoundedCornerShape(TwRadius.xs))
+
+@Deprecated("Tailwind v3 naming -- this is v4's rounded-xs.", ReplaceWith("this.roundedXs()"))
 fun Modifier.roundedSm(): Modifier = this.clip(RoundedCornerShape(TwRadius.sm))
 
+@Deprecated(
+    "Tailwind v3's bare/DEFAULT rounded -- v4 calls this rounded-sm, but that name is " +
+        "reserved by the deprecated roundedSm() (v3's different value) until it's removed.",
+)
 fun Modifier.rounded(): Modifier = this.clip(RoundedCornerShape(TwRadius.base))
 
 fun Modifier.roundedMd(): Modifier = this.clip(RoundedCornerShape(TwRadius.md))
@@ -69,5 +77,8 @@ fun Modifier.roundedXl(): Modifier = this.clip(RoundedCornerShape(TwRadius.xl))
 fun Modifier.roundedXl2(): Modifier = this.clip(RoundedCornerShape(TwRadius.xl2))
 
 fun Modifier.roundedXl3(): Modifier = this.clip(RoundedCornerShape(TwRadius.xl3))
+
+/** v4's `rounded-4xl` -- new in v4, no v3 equivalent. */
+fun Modifier.roundedXl4(): Modifier = this.clip(RoundedCornerShape(TwRadius.xl4))
 
 fun Modifier.roundedFull(): Modifier = this.clip(RoundedCornerShape(TwRadius.full))

@@ -22,11 +22,11 @@ import io.github.ronjunevaldoz.tailwind.modifiers.gap4
 @Composable
 fun BorderShowcase() {
     ShowcaseSection(
-        title = "Borders — roundedNone, rounded, roundedLg, roundedFull",
+        title = "Borders — roundedNone, roundedXs, roundedLg, roundedFull",
         code =
             """
             Row(horizontalArrangement = gap4()) {
-                listOf(TwRadius.none, TwRadius.base, TwRadius.lg, TwRadius.full).forEach { radius ->
+                listOf(TwRadius.none, TwRadius.xs, TwRadius.lg, TwRadius.full).forEach { radius ->
                     val shape = RoundedCornerShape(radius)
                     Box(Modifier.clip(shape).size(40.dp).border4(TwColors.blue500, shape))
                 }
@@ -34,7 +34,7 @@ fun BorderShowcase() {
             """.trimIndent(),
     ) {
         Row(horizontalArrangement = gap4()) {
-            listOf(TwRadius.none, TwRadius.base, TwRadius.lg, TwRadius.full).forEach { radius ->
+            listOf(TwRadius.none, TwRadius.xs, TwRadius.lg, TwRadius.full).forEach { radius ->
                 val shape = RoundedCornerShape(radius)
                 Box(Modifier.clip(shape).size(40.dp).border4(TwColors.blue500, shape))
             }

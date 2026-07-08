@@ -13,11 +13,30 @@ import androidx.compose.ui.unit.dp
 /**
  * Tailwind's `blur-*` filter utilities over [Modifier.blur]. `blur-none` is `0.dp`
  * (a no-op, included for API completeness/discoverability matching the Tailwind class).
+ *
+ * Tailwind v4 renamed this scale: v3's `blur-sm` is v4's `blur-xs`, and v3's bare
+ * `blur` is v4's `blur-sm` (v4 has no bare `blur` utility at all), one tier down from
+ * where those names used to point (confirmed against the live docs, not assumed).
+ * [blurSm] is kept at its original v3 value under `@Deprecated` -- not renamed in
+ * place, since Kotlin can't have two declarations named `blurSm` for two different
+ * values at once. [blurXs] is the new v4-correct name for the same value [blurSm]
+ * already held. There's no equally-named replacement for bare [blur] yet: v4's
+ * `blur-sm` (8.dp) can't be exposed as `blurSm()` while the deprecated [blurSm]
+ * (4.dp) still occupies that name -- that only becomes possible once it's removed
+ * in a future breaking release.
  */
 fun Modifier.blurNone(): Modifier = this.blur(0.dp)
 
+/** v4's `blur-xs`. Was `blurSm()` in v3 (see [blurSm]'s deprecation note). */
+fun Modifier.blurXs(): Modifier = this.blur(4.dp)
+
+@Deprecated("Tailwind v3 naming -- this is v4's blur-xs.", ReplaceWith("this.blurXs()"))
 fun Modifier.blurSm(): Modifier = this.blur(4.dp)
 
+@Deprecated(
+    "Tailwind v3's bare blur -- v4 calls this blur-sm (v4 has no bare blur at all), but " +
+        "that name is reserved by the deprecated blurSm() (v3's different value) until it's removed.",
+)
 fun Modifier.blur(): Modifier = this.blur(8.dp)
 
 fun Modifier.blurMd(): Modifier = this.blur(12.dp)

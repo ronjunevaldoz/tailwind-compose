@@ -79,7 +79,8 @@ fun ShowcaseSection(
     }
 }
 
-@Suppress("ktlint:standard:function-naming")
+// DEPRECATION: rounded() has no v4-named replacement yet -- see its deprecation note
+@Suppress("ktlint:standard:function-naming", "DEPRECATION")
 @Composable
 private fun SectionTab(
     label: String,

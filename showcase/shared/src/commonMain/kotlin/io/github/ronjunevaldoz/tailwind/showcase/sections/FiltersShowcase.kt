@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import io.github.ronjunevaldoz.shared.generated.resources.Res
 import io.github.ronjunevaldoz.shared.generated.resources.filter
 import io.github.ronjunevaldoz.tailwind.core.TwColors
-import io.github.ronjunevaldoz.tailwind.modifiers.blurSm
+import io.github.ronjunevaldoz.tailwind.modifiers.blurXs
 import io.github.ronjunevaldoz.tailwind.modifiers.brightness150
 import io.github.ronjunevaldoz.tailwind.modifiers.contrast150
 import io.github.ronjunevaldoz.tailwind.modifiers.fontMedium
@@ -58,7 +58,7 @@ private enum class FilterOption(
     val apply: Modifier.() -> Modifier,
 ) {
     NONE("none", { this }),
-    BLUR_SM("blurSm", { blurSm() }),
+    BLUR_XS("blurXs", { blurXs() }),
     BRIGHTNESS_150("brightness150", { brightness150() }),
     GRAYSCALE("grayscale", { grayscale() }),
     CONTRAST_150("contrast150", { contrast150() }),
@@ -70,10 +70,10 @@ private enum class FilterOption(
 @Composable
 fun FiltersShowcase() {
     ShowcaseSection(
-        title = "Filters — blurSm, brightness150, grayscale, contrast150, saturate200, sepia",
+        title = "Filters — blurXs, brightness150, grayscale, contrast150, saturate200, sepia",
         code =
             """
-            var selected by remember { mutableStateOf(FilterOption.BLUR_SM) }
+            var selected by remember { mutableStateOf(FilterOption.BLUR_XS) }
 
             Image(
                 painterResource(Res.drawable.filter),
@@ -86,7 +86,7 @@ fun FiltersShowcase() {
                 horizontalArrangement = gap2(),
             ) {
                 // one tappable, transparent label per option -- tapping re-filters the image above
-                Text("blurSm", modifier = Modifier.clickable { selected = FilterOption.BLUR_SM })
+                Text("blurXs", modifier = Modifier.clickable { selected = FilterOption.BLUR_XS })
                 Text("grayscale", modifier = Modifier.clickable { selected = FilterOption.GRAYSCALE })
                 // ...
             }
@@ -99,7 +99,7 @@ fun FiltersShowcase() {
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun FilterCarousel() {
-    var selected by remember { mutableStateOf(FilterOption.BLUR_SM) }
+    var selected by remember { mutableStateOf(FilterOption.BLUR_XS) }
 
     Column(verticalArrangement = gap4()) {
         Box(modifier = Modifier.dotGridBackground().p4()) {

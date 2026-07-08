@@ -88,7 +88,7 @@ instead, threading one `Shape` through all three in the one order that keeps the
 consistent:
 
 ```kotlin
-Modifier.twCard(shape = RoundedCornerShape(TwRadius.lg), color = TwColors.white, shadowElevation = TwShadow.sm)
+Modifier.twCard(shape = RoundedCornerShape(TwRadius.lg), color = TwColors.white, shadowElevation = TwShadow.xs)
 Modifier.twCard() // same defaults as above
 ```
 
