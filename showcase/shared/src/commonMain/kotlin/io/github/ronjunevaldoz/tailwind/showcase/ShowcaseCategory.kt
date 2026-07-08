@@ -15,6 +15,7 @@ enum class ShowcaseCategory(
     Opacity("Opacity"),
     AspectRatio("Aspect Ratio"),
     Shadow("Shadow"),
+    Ring("Ring"),
     Flex("Flex Alignment"),
     Gradient("Gradients"),
     Grid("Grid"),
