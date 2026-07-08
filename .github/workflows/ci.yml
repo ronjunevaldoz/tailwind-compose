@@ -66,7 +66,7 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Run Android host tests (library modules)
-        run: ./gradlew :tailwind-core:testDebugUnitTest :tailwind-layout:testDebugUnitTest :tailwind-color:testDebugUnitTest :tailwind-typography:testDebugUnitTest :tailwind-effects:testDebugUnitTest :tailwind-compose:testDebugUnitTest --continue
+        run: ./gradlew :tailwind-core:testAndroidHostTest :tailwind-layout:testAndroidHostTest :tailwind-color:testAndroidHostTest :tailwind-typography:testAndroidHostTest :tailwind-effects:testAndroidHostTest :tailwind-compose:testAndroidHostTest --continue
 
       - name: Run showcase Android tests
         run: ./gradlew :showcase:androidApp:testDebugUnitTest --continue
