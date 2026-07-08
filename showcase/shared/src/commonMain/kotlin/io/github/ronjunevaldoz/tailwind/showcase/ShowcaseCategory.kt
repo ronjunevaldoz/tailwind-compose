@@ -19,7 +19,6 @@ enum class ShowcaseCategory(
     Gradient("Gradients"),
     Grid("Grid"),
     Filters("Filters"),
-    Icons("Icons"),
     Transition("Transitions"),
     Transform3D("3D Transforms"),
     Transform2D("2D Transforms"),

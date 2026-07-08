@@ -131,7 +131,7 @@ Android, iOS, Desktop (JVM), Web (JS + WasmJs).
 
 ## Modules
 
-All seven live under `tailwind/` as `tailwind/<name>` (e.g. `tailwind/core`, no redundant
+All six live under `tailwind/` as `tailwind/<name>` (e.g. `tailwind/core`, no redundant
 `tailwind-` prefix on disk) via `projectDir` in `settings.gradle.kts` — Gradle project
 paths/task names and published artifactIds are still flat, e.g. `:tailwind-core`:
 
@@ -145,22 +145,16 @@ paths/task names and published artifactIds are still flat, e.g. `:tailwind-core`
   tracking, font-family
 - [`tailwind-effects`](tailwind/effects) — border, box-shadow, opacity, filters,
   transitions, 2D/3D transforms, the `twCard()` combinator
-- [`tailwind-icons-outline`](tailwind/icons-outline) —
-  [Heroicons](https://github.com/tailwindlabs/heroicons) Outline (MIT, Tailwind Labs)
-  compiled to Compose `ImageVector`, one file per icon, 324 icons. Named with the
-  `-outline` suffix (not bare `tailwind-icons`) so a future sibling module for another
-  Heroicons style (Solid/Mini/Micro) has an unambiguous name and package
-  (`io.github.ronjunevaldoz.tailwind.icons.outline`) from day one — two variant modules
-  on the same classpath would otherwise collide on identical class names. **Not** part
-  of the `tailwind-compose` facade below — opt in explicitly:
-  `implementation("io.github.ronjunevaldoz:tailwind-icons-outline:<version>")`. See
-  [`tailwind/icons-outline/NOTICE.md`](tailwind/icons-outline/NOTICE.md) for the
-  bundled-icon license.
 - [`tailwind-compose`](tailwind/compose) — public facade module; depends on
-  `tailwind-core` and all four utility modules above (not `tailwind-icons-outline`), so
-  most consumers only need this one dependency
+  `tailwind-core` and all four utility modules above, so most consumers only need this
+  one dependency
 - [`showcase`](showcase) — internal demo app rendering every utility category, used for
   visual verification via Roborazzi (not published)
+
+Looking for icons? [Heroicons](https://github.com/tailwindlabs/heroicons) compiled to
+Compose `ImageVector` now lives in its own repo,
+[heroicons-compose](https://github.com/ronjunevaldoz/heroicons-compose) — split out
+since Heroicons is a separate upstream product from Tailwind CSS itself.
 
 ## Build
 

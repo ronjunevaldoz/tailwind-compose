@@ -66,8 +66,6 @@ val publishedModuleDescriptions =
             "and font-family TextStyle extensions for Compose Multiplatform.",
         "tailwind-effects" to "Tailwind-style border, box-shadow, opacity, filter, transition, " +
             "and 3D transform Modifier extensions for Compose Multiplatform.",
-        "tailwind-icons-outline" to "Heroicons Outline (MIT, Tailwind Labs) compiled to Compose " +
-            "ImageVector for tailwind-compose. Not included in the tailwind-compose facade -- opt in explicitly.",
         "tailwind-compose" to "Tailwind CSS-inspired utilities for Compose Multiplatform " +
             "(facade module — depends on tailwind-core + tailwind-layout/color/typography/effects).",
     )

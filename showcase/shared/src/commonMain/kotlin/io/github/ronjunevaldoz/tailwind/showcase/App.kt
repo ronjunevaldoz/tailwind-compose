@@ -50,7 +50,6 @@ import io.github.ronjunevaldoz.tailwind.showcase.sections.FiltersShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.FlexShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.GradientShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.GridShowcase
-import io.github.ronjunevaldoz.tailwind.showcase.sections.IconsShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.LogicalPropertiesExplainer
 import io.github.ronjunevaldoz.tailwind.showcase.sections.OpacityShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.P3ColorsExplainer
@@ -166,7 +165,6 @@ private fun CategoryDetail(category: ShowcaseCategory) {
         ShowcaseCategory.Gradient -> GradientShowcase()
         ShowcaseCategory.Grid -> GridShowcase()
         ShowcaseCategory.Filters -> FiltersShowcase()
-        ShowcaseCategory.Icons -> IconsShowcase()
         ShowcaseCategory.Transition -> TransitionShowcase()
         ShowcaseCategory.Transform3D -> Transform3DShowcase()
         ShowcaseCategory.Transform2D -> Transform2DShowcase()

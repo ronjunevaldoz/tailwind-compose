@@ -65,11 +65,8 @@ kotlin {
         }
         commonMain.dependencies {
             // Showcase depends on the public facade module, same as any real consumer of
-            // this library would -- plus tailwind-icons-outline explicitly, since that module is
-            // deliberately not part of the facade (opt-in only), demonstrating exactly how
-            // a consumer who wants icons would add it themselves.
+            // this library would.
             api(projects.tailwindCompose)
-            api(projects.tailwindIconsOutline)
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
