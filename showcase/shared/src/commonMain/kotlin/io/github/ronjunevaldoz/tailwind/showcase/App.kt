@@ -57,6 +57,7 @@ import io.github.ronjunevaldoz.tailwind.showcase.sections.ResponsiveShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.ShadowShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.SizingShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.SpacingShowcase
+import io.github.ronjunevaldoz.tailwind.showcase.sections.Transform2DShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.Transform3DShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.TransitionShowcase
 import io.github.ronjunevaldoz.tailwind.showcase.sections.TypographyShowcase
@@ -166,6 +167,7 @@ private fun CategoryDetail(category: ShowcaseCategory) {
         ShowcaseCategory.Filters -> FiltersShowcase()
         ShowcaseCategory.Transition -> TransitionShowcase()
         ShowcaseCategory.Transform3D -> Transform3DShowcase()
+        ShowcaseCategory.Transform2D -> Transform2DShowcase()
         ShowcaseCategory.DarkMode -> DarkModeShowcase()
         ShowcaseCategory.Responsive -> ResponsiveShowcase()
         ShowcaseCategory.CssVariables -> CssVariablesExplainer()

@@ -42,7 +42,8 @@ Status legend:
 | | hue-rotate-*, drop-shadow-*, backdrop-* | ⬜ | Same `ColorMatrix` technique as the others but needs a rotation matrix (hue-rotate) or isn't a per-content filter at all (drop-shadow, backdrop-*) — deferred until something actually needs them |
 | **Transitions & Animation** | duration-*, ease-* (tokens), transition-all (size only) | ✅ | Post-MVP — `TwDuration`/`TwEasing` tokens (`tailwind-core`) matching CSS's exact cubic-bezier curves; `transitionAllDuration75/150/300/500()` in `Transition.kt` wraps `Modifier.animateContentSize` (the closest single-Modifier match to CSS's "animate any changed property" — Compose has no general equivalent, other properties need `animateXAsState` at the call site using the same tokens) |
 | **Transforms** | rotate-x/y/z (45/90/180°), perspective (near/normal/distant) | ✅ | Post-MVP — `Transform3D.kt`, via `Modifier.graphicsLayer`'s `rotationX/Y/Z`/`cameraDistance`. Representative subset only (Tailwind's full rotate scale is ~9 steps × 3 axes × 2 signs); `perspective-*` is a named-preset approximation, not a unit conversion (CSS px vs. Compose's inversely-related camera-distance units) |
-| | scale, skew, translate (2D transforms), transform-origin, zoom | ⬜ | Not on roadmap; same `graphicsLayer` primitive as rotate/perspective, straightforward follow-up |
+| | scale (uniform), translate-x/y | ✅ | `scale0()`…`scale200()` (complete 11-step canonical scale, per `utilities.ts` `suggest('scale', ...)`) and `translateX1/2/4/8()`/`translateXNeg1/2/4/8()`/`translateY1/2/4/8()`/`translateYNeg1/2/4/8()` (representative subset of the [TwSpacing] scale, matching this file's existing rotate-scope precedent) in `Transform3D.kt`, via `Modifier.graphicsLayer`'s `scaleX/Y`/`translationX/Y` |
+| | skew, scale-x/y (per-axis), transform-origin, zoom, translate fractions (`1/2`, `full`) | ⬜ | Not on roadmap; `skew` has no `graphicsLayer` property (verified against Compose Multiplatform 1.11.1 `GraphicsLayerScope` source — only scale/translation/rotation/cameraDistance/transformOrigin exist), would need a custom matrix/canvas-transform technique instead of a passthrough; translate fractions are relative to the element's own measured size, a different mechanism than a fixed Dp offset |
 | **Interactivity** | cursor, scroll-behavior/margin/padding, scroll-snap-*, touch-action, user-select, resize, will-change, appearance | ⬜ | Not on roadmap; several are desktop/pointer-only concepts (cursor) that don't apply to touch-first mobile UIs |
 | **Tables** | border-collapse, border-spacing, table-layout, caption-side | ⬜ | Not planned — Compose has no HTML-table layout primitive; would map to a custom grid composable, out of scope for a Modifier library |
 | **SVG** | fill, stroke, stroke-width | ⬜ | Not planned — Compose styles vector art via `Painter`/`ImageVector` properties, not `Modifier`; different API shape entirely |
@@ -55,7 +56,7 @@ Status legend:
   aspect-ratio (Sprint 3); box-shadow, flex alignment, dark mode, gradients (4 cardinal
   directions), grid (fixed column count), filters (blur/grayscale/invert/sepia),
   transitions (size animation + duration/easing tokens), 3D transforms (rotate + perspective
-  presets) (post-MVP)
+  presets), 2D transforms (scale + translate-x/y) (post-MVP)
 - **Deliberately partial**: each of the "bigger lift" post-MVP items above covers the
   common/representative case, not Tailwind's full numeric scale or CSS's complete model —
   see each category's row for exactly what's deferred and why

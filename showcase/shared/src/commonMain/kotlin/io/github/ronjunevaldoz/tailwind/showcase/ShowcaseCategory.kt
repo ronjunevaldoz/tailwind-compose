@@ -21,6 +21,7 @@ enum class ShowcaseCategory(
     Filters("Filters"),
     Transition("Transitions"),
     Transform3D("3D Transforms"),
+    Transform2D("2D Transforms"),
     DarkMode("Dark Mode"),
     Responsive("Responsive"),
     CssVariables("CSS Variables", isExplainerOnly = true),
