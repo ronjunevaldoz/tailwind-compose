@@ -26,7 +26,7 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Build all publishable modules
-        run: ./gradlew :tailwind-core:build :tailwind-layout:build :tailwind-color:build :tailwind-typography:build :tailwind-effects:build :tailwind-compose:build
+        run: ./gradlew :tailwind-core:build :tailwind-layout:build :tailwind-color:build :tailwind-typography:build :tailwind-effects:build :tailwind-icons-outline:build :tailwind-compose:build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -38,6 +38,7 @@ jobs:
             tailwind/color/build/outputs/
             tailwind/typography/build/outputs/
             tailwind/effects/build/outputs/
+            tailwind/icons-outline/build/outputs/
             tailwind/compose/build/outputs/
           retention-days: 30
 
@@ -99,6 +100,14 @@ jobs:
 
       - name: Publish and release tailwind-effects
         run: ./gradlew :tailwind-effects:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_SIGNING_PASSWORD }}
+
+      - name: Publish and release tailwind-icons-outline
+        run: ./gradlew :tailwind-icons-outline:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
