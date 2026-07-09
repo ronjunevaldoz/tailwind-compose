@@ -163,14 +163,18 @@ Compose Foundation's real `Style`/`StyleScope` API (`@ExperimentalFoundationStyl
 e.g. `Style.ringStyle()` instead of `Modifier.ring()`. It's a separate Gradle composite
 build (own `settings.gradle.kts`), not one of the modules above, and isn't published.
 
-It's not ready to fold into `tailwind-compose`, blocked on three things upstream:
+It's not ready to fold into `tailwind-compose`, blocked on three things upstream (see
+[androidx.compose.ui release notes](https://developer.android.com/jetpack/androidx/releases/compose-ui)):
 
-- Pinned to Compose Multiplatform `1.12.0-beta01`, a pre-release line.
-- Every function is `@ExperimentalFoundationStyleApi` — the surface can still change.
-- **Android is unreachable today**: the 1.12.0-beta01 Android artifacts declare
-  `minCompileSdk=37` in their AAR metadata, and Android SDK Platform 37 isn't published
-  yet (checked Google's stable/beta/dev/canary repository channels directly — none have
-  it). So `style-experimental` has no Android target at all, by design.
+- Pinned to Compose Multiplatform `1.12.0-beta01` (released June 17, 2026), a pre-release line.
+- Every function is `@ExperimentalFoundationStyleApi` — genuinely unstable, not just
+  labeled that way: `StyleScope`'s helper functions moved from members to extension
+  functions as a breaking change between 1.12.0-alpha01 and alpha03.
+- **Android is unreachable today**: 1.12.0-alpha01 bumped Compose's `compileSdk` to API
+  37, requiring AGP 9.2.0+. Android SDK Platform 37 isn't published yet (checked Google's
+  stable/beta/dev/canary repository channels directly, and each Android artifact's own
+  `aar-metadata.properties` — none have it). So `style-experimental` has no Android
+  target at all, by design.
 
 JVM/Desktop, iOS, and Web (JS/WasmJs) all work fine against 1.12.0-beta01 today. A live,
 web-only demo of every Style extension lives at
