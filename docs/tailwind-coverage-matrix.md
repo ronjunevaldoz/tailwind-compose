@@ -111,28 +111,48 @@ history). `twCard()` exists purely to close that Compose-specific gap, not to mo
 Tailwind class, hence the `tw` prefix it shares with `twDark`/`twResponsive`:
 
 ```kotlin
-Modifier.twCard(shape = RoundedCornerShape(TwRadius.lg), color = TwColors.white, shadowElevation = TwShadow.sm)
+Modifier.twCard(shape = RoundedCornerShape(TwRadius.lg), color = TwColors.white, shadowElevation = TwShadow.xs)
 ```
 
 It threads one `Shape` through `shadow() -> clip() -> background()` in the required order
 instead of leaving callers to build and repeat it themselves. See `Card.kt`.
 
-## Compose Styles API — not used
+## Compose Styles API — adopted, isolated in `tailwind-style-experimental`
 
 Jetpack Compose has a real, distinct **Styles API** (`Style`/`StyleScope`/`StyleState`,
-`@ExperimentalStylesApi`, documented at `developer.android.com/develop/ui/compose/styles`) —
-a CSS-style-like mechanism for defining state-based visual properties (padding, background,
-border, ...) as a single reusable object, separate from `TextStyle`. This library does not
-use it, for one concrete reason: **it requires Compose 1.12.0-alpha03 or later**, and this
-project is pinned to Compose Multiplatform 1.11.1 (stable) — confirmed by searching the
-actual 1.11.1 source jars for `ExperimentalStylesApi`, with zero matches anywhere in
-`androidx.compose.foundation`/`ui`. It's also still experimental/alpha upstream, which alone
-would be a reason to hold off adopting it into a library targeting a stable release. This is
-unrelated to `tailwind-compose`'s own colloquial "Style API" terminology used elsewhere in
-this project (the `TextStyle`-returning function family — `textSm()`, `fontBold()`,
-`text(color: Color)`, etc.) — that's this library's own established, deliberately-chosen
-naming, not a reference to the AndroidX feature above. Revisit once the project's pinned
-Compose Multiplatform version reaches parity with 1.12.0-alpha03+ and the API stabilizes.
+`@ExperimentalFoundationStyleApi` — not `@ExperimentalStylesApi`, a name that appears in some
+secondary docs but doesn't match the actual compiled annotation, confirmed by decompiling the
+real 1.12.0-beta01 jar rather than trusting the summary), documented at
+`developer.android.com/develop/ui/compose/styles` — a CSS-style-like mechanism for defining
+state-based visual properties (padding, background, border, drop/inner shadow via a `Shadow`
+value with a real `spread` parameter, ...) as a single reusable object, separate from
+`TextStyle`. Originally not used here at all: it required Compose 1.12.0-alpha03+ while this
+project was pinned to 1.11.1 (stable), and was confirmed absent from the actual 1.11.1 source
+jars. As of `tailwind-style-experimental`, Compose Multiplatform 1.12.0-beta01 (the latest
+available at the time) was confirmed to include `Style`/`StyleScope`/`StyleState`/`ShadowScope`
+in `commonMain` (genuinely multiplatform, not Android-only) by downloading and inspecting the
+real sources jar — so a `ringStyle()` implementation was built on it (`RingStyle.kt`,
+`ShadowScope.dropShadow(Shadow(radius = 0.dp, spread = width, color = color))`, more faithful
+to CSS `box-shadow`'s spread radius than `tailwind-effects`' hand-rolled `ring()`). The API is
+still `@ExperimentalFoundationStyleApi` ("subject to change") and 1.12.0-beta01 is pre-release,
+so this is deliberately **isolated in its own composite build**
+(`tailwind/style-experimental/`, included via `includeBuild` in the root `settings.gradle.kts`,
+not a regular subproject) — a plain `include()` subproject can't run a different
+`org.jetbrains.compose` plugin version than the rest of the build (the plugin resolves to one
+version build-wide once anything applies it via the root's `apply false`), and this keeps every
+stable, published module on 1.11.1. It resolves `tailwind-core` from `mavenLocal()` rather than
+via automatic composite-build dependency substitution, which does not fire in this direction
+(included build consuming the includer's own regular subproject, not the other way around) —
+confirmed empirically, not assumed; run `./gradlew :tailwind-core:publishToMavenLocal` before
+building this module to pick up local `tailwind-core` changes. No Android target: Compose
+1.12.0-beta01's Android artifacts require AGP 9.1.0+/compileSdk 37+, a second, unrelated version
+bump out of scope here — JVM/desktop already fully exercises and verifies the real Style API via
+`RingStyleTest.kt`'s passing pixel assertions. This is unrelated to `tailwind-compose`'s own
+colloquial "Style API" terminology used elsewhere in this project (the `TextStyle`-returning
+function family — `textSm()`, `fontBold()`, `text(color: Color)`, etc.) — that's this library's
+own established, deliberately-chosen naming, not a reference to the AndroidX feature above.
+Revisit folding this into the stable module graph once Compose Multiplatform reaches a stable
+release with this API and this project's own pinned version catches up to it.
 
 ## Refreshing this matrix
 

@@ -50,6 +50,17 @@ project(":tailwind-typography").projectDir = file("tailwind/typography")
 project(":tailwind-effects").projectDir = file("tailwind/effects")
 project(":tailwind-compose").projectDir = file("tailwind/compose")
 
+// Not part of the stable module graph above: pinned to a pre-release Compose Multiplatform
+// version (1.12.0-beta01) for androidx.compose.foundation.style's real Style/StyleScope/
+// StyleState API (@ExperimentalFoundationStyleApi, not yet in the 1.11.1 stable line this
+// project otherwise targets) -- see tailwind/style-experimental/build.gradle.kts. A regular
+// `include()` subproject can't do this: the root's `apply false` on org.jetbrains.compose
+// locks that plugin ID to 1.11.1 build-wide, and a subproject requesting a different version
+// of the same plugin ID fails to resolve. `includeBuild` (a real composite build, its own
+// settings.gradle.kts/plugin classpath) is the only way to get genuine version isolation
+// while still consuming tailwind-core's source directly via dependency substitution.
+includeBuild("tailwind/style-experimental")
+
 include(":showcase:shared")
 include(":showcase:androidApp")
 include(":showcase:desktopApp")
