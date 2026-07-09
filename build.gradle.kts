@@ -76,7 +76,7 @@ subprojects {
     apply(plugin = "com.vanniktech.maven.publish")
 
     extensions.configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
-        publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
+        publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
 
         // Only sign when an in-memory GPG key is actually available (release.yml sets
         // ORG_GRADLE_PROJECT_signingInMemoryKey, which Gradle exposes here as this
