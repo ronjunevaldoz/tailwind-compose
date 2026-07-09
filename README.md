@@ -156,6 +156,33 @@ Compose `ImageVector` now lives in its own repo,
 [heroicons-compose](https://github.com/ronjunevaldoz/heroicons-compose) — split out
 since Heroicons is a separate upstream product from Tailwind CSS itself.
 
+## Style API (experimental, not yet part of the public library)
+
+[`tailwind/style-experimental`](tailwind/style-experimental) ports every utility above to
+Compose Foundation's real `Style`/`StyleScope` API (`@ExperimentalFoundationStyleApi`) —
+e.g. `Style.ringStyle()` instead of `Modifier.ring()`. It's a separate Gradle composite
+build (own `settings.gradle.kts`), not one of the modules above, and isn't published.
+
+It's not ready to fold into `tailwind-compose`, blocked on three things upstream:
+
+- Pinned to Compose Multiplatform `1.12.0-beta01`, a pre-release line.
+- Every function is `@ExperimentalFoundationStyleApi` — the surface can still change.
+- **Android is unreachable today**: the 1.12.0-beta01 Android artifacts declare
+  `minCompileSdk=37` in their AAR metadata, and Android SDK Platform 37 isn't published
+  yet (checked Google's stable/beta/dev/canary repository channels directly — none have
+  it). So `style-experimental` has no Android target at all, by design.
+
+JVM/Desktop, iOS, and Web (JS/WasmJs) all work fine against 1.12.0-beta01 today. A live,
+web-only demo of every Style extension lives at
+[`tailwind/style-experimental/.../style/demo/App.kt`](tailwind/style-experimental/src/commonMain/kotlin/io/github/ronjunevaldoz/tailwind/style/demo/App.kt) —
+run it with `./gradlew :style-experimental:wasmJsBrowserDevelopmentRun`. It's kept
+separate from the main `showcase` app on purpose: mixing a Compose 1.11.1 binary
+(`showcase`) with 1.12.0-beta01-compiled code in the same WebAssembly bundle crashes at
+runtime with a Skiko `LinkError`, confirmed empirically.
+
+Revisit migrating `tailwind-compose` to the Style API once Android API 37 ships publicly
+and the API comes off `@ExperimentalFoundationStyleApi`.
+
 ## Build
 
 ```bash
