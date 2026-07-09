@@ -187,6 +187,11 @@ runtime with a Skiko `LinkError`, confirmed empirically.
 Revisit migrating `tailwind-compose` to the Style API once Android API 37 ships publicly
 and the API comes off `@ExperimentalFoundationStyleApi`.
 
+See [`docs/style-api-comparison.md`](docs/style-api-comparison.md) for a side-by-side
+Modifier API vs Style API reference — a quick-lookup table plus real, working code for
+every category (ring, shadow, border, color, opacity, filters, transform, transition,
+spacing, sizing, typography).
+
 ## Build
 
 ```bash
