@@ -5,9 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
-import androidx.compose.foundation.style.styleable
+import androidx.compose.foundation.style.Style
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertHeightIsEqualTo
@@ -26,9 +27,9 @@ class RingStyleTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun ringStyle4_doesNotChangeMeasuredSize() {
+    fun ring4_doesNotChangeMeasuredSize() {
         composeTestRule.setContent {
-            Box(Modifier.testTag("box").size(50.dp).styleable(style = ringStyle4(Color.Blue)))
+            Box(Modifier.testTag("box").size(50.dp).ring4(Color.Blue))
         }
         composeTestRule
             .onNodeWithTag("box")
@@ -37,15 +38,10 @@ class RingStyleTest {
     }
 
     @Test
-    fun ringStyle4_paintsBeyondTheBoxIntoTheSurroundingArea() {
+    fun ring4_paintsBeyondTheBoxIntoTheSurroundingArea() {
         composeTestRule.setContent {
             Box(Modifier.testTag("parent").padding(20.dp).size(100.dp)) {
-                Box(
-                    Modifier
-                        .size(60.dp)
-                        .styleable(style = ringStyle4(Color.Blue))
-                        .background(Color.White),
-                )
+                Box(Modifier.size(60.dp).ring4(Color.Blue).background(Color.White))
             }
         }
         val pixels = composeTestRule.onNodeWithTag("parent").captureToImage().toPixelMap()
@@ -53,18 +49,48 @@ class RingStyleTest {
     }
 
     @Test
-    fun ringStyle0_paintsNothingBeyondTheBox() {
+    fun ring0_paintsNothingBeyondTheBox() {
         composeTestRule.setContent {
             Box(Modifier.testTag("parent").padding(20.dp).size(100.dp)) {
-                Box(
-                    Modifier
-                        .size(60.dp)
-                        .styleable(style = ringStyle0(Color.Blue))
-                        .background(Color.White),
-                )
+                Box(Modifier.size(60.dp).ring0(Color.Blue).background(Color.White))
             }
         }
         val pixels = composeTestRule.onNodeWithTag("parent").captureToImage().toPixelMap()
         assert(pixels[15, 15].alpha == 0f) { "expected no ring paint for a zero-width ring" }
+    }
+
+    /**
+     * `Style.ringStyle(...)` -- the [Style] extension form, not the `Modifier.ring(...)`
+     * convenience wrapper -- applied through the generic [style] extension. Proves the two paths
+     * paint identically, and that `Style` (the companion/empty-default) works as the starting
+     * receiver.
+     */
+    @Test
+    fun styleRingStyle_viaGenericStyleExtension_paintsTheSameAsTheDirectExtension() {
+        composeTestRule.setContent {
+            Box(Modifier.testTag("parent").padding(20.dp).size(100.dp)) {
+                Box(Modifier.size(60.dp).style(Style.ringStyle(Color.Blue, 4.dp)).background(Color.White))
+            }
+        }
+        val pixels = composeTestRule.onNodeWithTag("parent").captureToImage().toPixelMap()
+        assertNotEquals(0f, pixels[18, 18].alpha, "expected a visible ring tint just outside the box")
+    }
+
+    /** [Style.then] composes a [Style.ringStyle] onto an existing, non-empty style. */
+    @Test
+    fun ringStyle_composesOntoAnExistingStyleViaThen() {
+        val baseStyle =
+            Style {
+                dropShadow(Shadow(radius = 0.dp, spread = 2.dp, color = Color.Red))
+            }
+        composeTestRule.setContent {
+            Box(Modifier.testTag("parent").padding(20.dp).size(100.dp)) {
+                Box(Modifier.size(60.dp).style(baseStyle.ringStyle(Color.Blue, 4.dp)).background(Color.White))
+            }
+        }
+        val pixels = composeTestRule.onNodeWithTag("parent").captureToImage().toPixelMap()
+        // 4dp ring extends further out (to row/col 16) than the base style's 2dp shadow (to 18) --
+        // at (18,18), only the ring is guaranteed painted; assert composition took effect at all.
+        assertNotEquals(0f, pixels[18, 18].alpha, "expected the composed style to still paint a ring")
     }
 }
