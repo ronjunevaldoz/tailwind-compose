@@ -162,6 +162,52 @@ own established, deliberately-chosen naming, not a reference to the AndroidX fea
 Revisit folding this into the stable module graph once Compose Multiplatform reaches a stable
 release with this API and this project's own pinned version catches up to it.
 
+### `tailwind-style-experimental` coverage
+
+Every `tailwind-effects`/`tailwind-layout`/`tailwind-color`/`tailwind-typography` category that
+has a matching `StyleScope` facet now has a `Style.xxxStyle()` port:
+
+| File | `Style` extension | `StyleScope` facet |
+|---|---|---|
+| `RingStyle.kt` | `ringStyle` | `ShadowScope.dropShadow` (`spread`) |
+| `ShadowStyle.kt` | `shadowStyle` | `ShadowScope.dropShadow` (`radius`) |
+| `BorderStyle.kt` | `borderStyle`, `roundedStyle` | `BorderScope`, `ShapeScope` |
+| `ColorStyle.kt` | `bgStyle` (`Color` and `Brush` — gradients), `textColorStyle` | `BackgroundScope`, `ContentColorScope` |
+| `OpacityStyle.kt` | `opacityStyle` | `AlphaScope` |
+| `FilterStyle.kt` | `grayscaleStyle`/`invertStyle`/`sepiaStyle`/`brightnessStyle`/`contrastStyle`/`saturateStyle` | `ColorFilterScope` |
+| `TransformStyle.kt` | `scaleStyle`, `rotateXStyle`/`rotateYStyle`/`rotateZStyle`, `translateXStyle`/`translateYStyle` | `ScaleScope`, `RotationScope`, `TranslationScope` |
+| `TransitionStyle.kt` | `transitionStyle` | `AnimateStyleScope` |
+| `SpacingStyle.kt` | `paddingStyle`, `marginStyle` | `ContentPaddingScope`, `ExternalPaddingScope` |
+| `SizingStyle.kt` | `widthStyle`/`heightStyle`, `minWidthStyle`/`minHeightStyle`, `maxWidthStyle`/`maxHeightStyle` | `SizeScope`, `MinSizeScope`, `MaxSizeScope` |
+| `TypographyStyle.kt` | `fontSizeStyle`, `lineHeightStyle`, `fontWeightStyle`, `letterSpacingStyle`, `textAlignStyle`, `textDecorationStyle`, `fontFamilyStyle` | `TextStyleStyleScope` family |
+| `ZIndexStyle.kt` | `zIndexStyle` | `ZIndexScope` — no `tailwind-effects` Modifier equivalent exists at all; this is the first `z-*` implementation anywhere in the project |
+
+Parameterized rather than one function per exact Tailwind scale step (e.g. `bgStyle(color: Color)`
+takes any `TwColors` entry rather than 286 hue x shade functions), matching the same
+"representative subset, not exhaustive" precedent `Transform3D.kt` already established for
+rotate/translate/scale.
+
+**Genuinely out of scope for the Style API**, not gaps in this porting pass:
+- `Flex.kt`/`Grid.kt` (`justifyCenter()`, `gridCols4()`, ...) return `Arrangement`/`Alignment`/
+  `GridCells` values consumed by `Row`/`Column`/`LazyVerticalGrid`'s own composable parameters —
+  multi-child arrangement, which a single component's own `Style` has no way to express (a
+  `Style` styles one component's box, not how it lays out several).
+- `Layout.kt`'s `aspectRatio` has no `StyleScope` counterpart at all (checked: `SizeScope` has
+  `width`/`height`/`fillWidth`/`fillHeight`, no `aspectRatio`).
+- `Responsive.kt` (`currentTwWindowWidth()`, `twResponsive()`) resolves a value at composition
+  time based on the current breakpoint — not a stylable property, a value resolver.
+- `DarkMode.kt` (`twDark { }`) conditionally swaps which modifiers/TextStyle apply based on
+  theme — `StyleState` does support custom, queryable states beyond hover/press/focus (via
+  `StyleStateKey`), so a dark-mode-driven `Style` branch is plausible in principle, but wiring a
+  custom `StyleStateKey` for it is a different, more involved integration than the other
+  one-line ports above, not attempted here.
+
+**Bonus, not originally planned:** `Card.kt`'s `twCard()` combinator exists purely to fix
+Compose's `shadow()`/`clip()`/`background()` modifier-ordering footgun (see its own KDoc and
+"Compose modifier ordering pitfalls" above) — that whole problem class doesn't exist for
+`Style`, since `shadowStyle(...).roundedStyle(...).bgStyle(...)` compose via `.then()` in any
+order without an ordering-sensitive footgun to guard against.
+
 ## Refreshing this matrix
 
 Re-run against a newer Tailwind release with:
