@@ -32,11 +32,19 @@ import io.github.ronjunevaldoz.tailwind.modifiers.textWhite
 import io.github.ronjunevaldoz.tailwind.modifiers.twCard
 import io.github.ronjunevaldoz.tailwind.modifiers.twDark
 
+private enum class SectionTabMode { PREVIEW, CODE, STYLE_API }
+
 /**
  * Shared section wrapper used by every showcase category — a title, its live demo, and
  * (when [code] is supplied) a Preview/Code toggle that swaps the demo for a [CodeBlock]
  * showing the snippet that produced it. Explainer-only categories pass no [code] and get
  * the title + content with no toggle, same as before.
+ *
+ * [styleCode], when supplied, adds a third "Style API" tab showing the equivalent
+ * `tailwind-style-experimental` snippet — code-only, no live preview. That module is
+ * deliberately isolated on a different (pre-release) Compose Multiplatform version than
+ * this showcase app (see `docs/tailwind-coverage-matrix.md`'s Style API section), so it
+ * can't be depended on here to render live the way the Modifier-based [content] can.
  */
 @Suppress("ktlint:standard:function-naming")
 @Composable
@@ -44,9 +52,10 @@ fun ShowcaseSection(
     title: String,
     modifier: Modifier = Modifier,
     code: String? = null,
+    styleCode: String? = null,
     content: @Composable () -> Unit,
 ) {
-    var showCode by remember { mutableStateOf(false) }
+    var mode by remember { mutableStateOf(SectionTabMode.PREVIEW) }
     Column(
         modifier =
             modifier
@@ -66,15 +75,24 @@ fun ShowcaseSection(
         if (code != null) {
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = gap2()) {
-                SectionTab(label = "Preview", selected = !showCode) { showCode = false }
-                SectionTab(label = "Code", selected = showCode) { showCode = true }
+                SectionTab(
+                    label = "Preview",
+                    selected = mode == SectionTabMode.PREVIEW,
+                ) { mode = SectionTabMode.PREVIEW }
+                SectionTab(label = "Code", selected = mode == SectionTabMode.CODE) { mode = SectionTabMode.CODE }
+                if (styleCode != null) {
+                    SectionTab(label = "Style API", selected = mode == SectionTabMode.STYLE_API) {
+                        mode =
+                            SectionTabMode.STYLE_API
+                    }
+                }
             }
         }
         Spacer(Modifier.height(12.dp))
-        if (code != null && showCode) {
-            CodeBlock(code)
-        } else {
-            content()
+        when {
+            code != null && mode == SectionTabMode.CODE -> CodeBlock(code)
+            styleCode != null && mode == SectionTabMode.STYLE_API -> CodeBlock(styleCode)
+            else -> content()
         }
     }
 }

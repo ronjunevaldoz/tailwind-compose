@@ -35,6 +35,22 @@ fun RingShowcase() {
                     }
             }
             """.trimIndent(),
+        styleCode =
+            """
+            // tailwind-style-experimental -- Style.ringStyle(), a Style extension
+            // (see tailwind/style-experimental's own module for why this can't
+            // live-render here: a different, pre-release Compose Multiplatform version).
+            Row(horizontalArrangement = gap8()) {
+                listOf(Style.ringStyle(TwColors.blue500), Style.ringStyle2(TwColors.blue500),
+                    Style.ringStyle4(TwColors.blue500), Style.ringStyle8(TwColors.blue500))
+                    .forEach { ring ->
+                        Box(
+                            Modifier.padding(8.dp).size(40.dp)
+                                .styleable(style = Style.bgStyle(Color.White).then(ring)),
+                        )
+                    }
+            }
+            """.trimIndent(),
     ) {
         Row(horizontalArrangement = gap8()) {
             listOf(
