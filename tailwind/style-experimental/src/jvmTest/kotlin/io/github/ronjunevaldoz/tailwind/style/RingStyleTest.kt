@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.Style
+import androidx.compose.foundation.style.styleable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
@@ -27,9 +28,9 @@ class RingStyleTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun ring4_doesNotChangeMeasuredSize() {
+    fun ringStyle4_doesNotChangeMeasuredSize() {
         composeTestRule.setContent {
-            Box(Modifier.testTag("box").size(50.dp).ring4(Color.Blue))
+            Box(Modifier.testTag("box").size(50.dp).styleable(style = Style.ringStyle4(Color.Blue)))
         }
         composeTestRule
             .onNodeWithTag("box")
@@ -38,10 +39,15 @@ class RingStyleTest {
     }
 
     @Test
-    fun ring4_paintsBeyondTheBoxIntoTheSurroundingArea() {
+    fun ringStyle4_paintsBeyondTheBoxIntoTheSurroundingArea() {
         composeTestRule.setContent {
             Box(Modifier.testTag("parent").padding(20.dp).size(100.dp)) {
-                Box(Modifier.size(60.dp).ring4(Color.Blue).background(Color.White))
+                Box(
+                    Modifier
+                        .size(60.dp)
+                        .styleable(style = Style.ringStyle4(Color.Blue))
+                        .background(Color.White),
+                )
             }
         }
         val pixels = composeTestRule.onNodeWithTag("parent").captureToImage().toPixelMap()
@@ -49,31 +55,19 @@ class RingStyleTest {
     }
 
     @Test
-    fun ring0_paintsNothingBeyondTheBox() {
+    fun ringStyle0_paintsNothingBeyondTheBox() {
         composeTestRule.setContent {
             Box(Modifier.testTag("parent").padding(20.dp).size(100.dp)) {
-                Box(Modifier.size(60.dp).ring0(Color.Blue).background(Color.White))
+                Box(
+                    Modifier
+                        .size(60.dp)
+                        .styleable(style = Style.ringStyle0(Color.Blue))
+                        .background(Color.White),
+                )
             }
         }
         val pixels = composeTestRule.onNodeWithTag("parent").captureToImage().toPixelMap()
         assert(pixels[15, 15].alpha == 0f) { "expected no ring paint for a zero-width ring" }
-    }
-
-    /**
-     * `Style.ringStyle(...)` -- the [Style] extension form, not the `Modifier.ring(...)`
-     * convenience wrapper -- applied through the generic [style] extension. Proves the two paths
-     * paint identically, and that `Style` (the companion/empty-default) works as the starting
-     * receiver.
-     */
-    @Test
-    fun styleRingStyle_viaGenericStyleExtension_paintsTheSameAsTheDirectExtension() {
-        composeTestRule.setContent {
-            Box(Modifier.testTag("parent").padding(20.dp).size(100.dp)) {
-                Box(Modifier.size(60.dp).style(Style.ringStyle(Color.Blue, 4.dp)).background(Color.White))
-            }
-        }
-        val pixels = composeTestRule.onNodeWithTag("parent").captureToImage().toPixelMap()
-        assertNotEquals(0f, pixels[18, 18].alpha, "expected a visible ring tint just outside the box")
     }
 
     /** [Style.then] composes a [Style.ringStyle] onto an existing, non-empty style. */
@@ -85,7 +79,12 @@ class RingStyleTest {
             }
         composeTestRule.setContent {
             Box(Modifier.testTag("parent").padding(20.dp).size(100.dp)) {
-                Box(Modifier.size(60.dp).style(baseStyle.ringStyle(Color.Blue, 4.dp)).background(Color.White))
+                Box(
+                    Modifier
+                        .size(60.dp)
+                        .styleable(style = baseStyle.ringStyle(Color.Blue, 4.dp))
+                        .background(Color.White),
+                )
             }
         }
         val pixels = composeTestRule.onNodeWithTag("parent").captureToImage().toPixelMap()

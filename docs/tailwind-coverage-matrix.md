@@ -131,9 +131,17 @@ project was pinned to 1.11.1 (stable), and was confirmed absent from the actual 
 jars. As of `tailwind-style-experimental`, Compose Multiplatform 1.12.0-beta01 (the latest
 available at the time) was confirmed to include `Style`/`StyleScope`/`StyleState`/`ShadowScope`
 in `commonMain` (genuinely multiplatform, not Android-only) by downloading and inspecting the
-real sources jar — so a `ringStyle()` implementation was built on it (`RingStyle.kt`,
+real sources jar — so a `Style.ringStyle()` implementation was built on it (`RingStyle.kt`,
 `ShadowScope.dropShadow(Shadow(radius = 0.dp, spread = width, color = color))`, more faithful
-to CSS `box-shadow`'s spread radius than `tailwind-effects`' hand-rolled `ring()`). The API is
+to CSS `box-shadow`'s spread radius than `tailwind-effects`' hand-rolled `ring()`).
+**Every custom style in this module is an extension on `Style` itself** (`Style` carries a
+`companion object : Style`, the empty/no-op default, so `Style.ringStyle(color)` reads as
+"start from the Style entry point") — **not** a `Modifier` extension. A `Modifier` extension
+was tried and deliberately removed: it can't be `then`-composed with another `Style` the way
+two `Style` values can (`someStyle.ringStyle(color).then(otherStyle)`), so it would quietly
+steer callers away from the one thing a `Style` does that a plain `Modifier` chain doesn't.
+Apply the result with the Style API's own `Modifier.styleable(style = someStyle.ringStyle(...))`
+directly — no tailwind-compose-provided shortcut. The API is
 still `@ExperimentalFoundationStyleApi` ("subject to change") and 1.12.0-beta01 is pre-release,
 so this is deliberately **isolated in its own composite build**
 (`tailwind/style-experimental/`, included via `includeBuild` in the root `settings.gradle.kts`,
