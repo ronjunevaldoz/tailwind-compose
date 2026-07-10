@@ -20,7 +20,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-/** [BorderStyle], [ColorStyle], [OpacityStyle], [FilterStyle], and [ShadowStyle], grouped since all draw. */
+/** [BorderStyle], [ColorStyle], [OpacityStyle], and [ShadowStyle], grouped since all draw. */
 @OptIn(ExperimentalFoundationStyleApi::class)
 class DrawStyleTest {
     @get:Rule
@@ -78,17 +78,6 @@ class DrawStyleTest {
     }
 
     @Test
-    fun grayscaleStyle_removesColorSaturation() {
-        composeTestRule.setContent {
-            Box(Modifier.testTag("box").size(40.dp).styleable(style = Style.bgStyle(Color.Red).grayscaleStyle()))
-        }
-        val center = composeTestRule.onNodeWithTag("box").captureToImage().toPixelMap()[20, 20]
-        assertNotEquals(Color.Red, center, "expected grayscale to desaturate the red background")
-        assertEquals(center.red, center.green, 0.01f)
-        assertEquals(center.green, center.blue, 0.01f)
-    }
-
-    @Test
     fun shadowStyle_paintsBeyondTheBoxIntoTheSurroundingArea() {
         composeTestRule.setContent {
             Box(Modifier.testTag("parent").padding(20.dp).size(100.dp)) {
@@ -101,13 +90,5 @@ class DrawStyleTest {
         }
         val pixels = composeTestRule.onNodeWithTag("parent").captureToImage().toPixelMap()
         assertNotEquals(0f, pixels[15, 15].alpha, "expected a visible shadow tint just outside the box")
-    }
-
-    private fun assertEquals(
-        expected: Float,
-        actual: Float,
-        tolerance: Float,
-    ) {
-        assert(kotlin.math.abs(expected - actual) <= tolerance) { "expected $actual to be within $tolerance of $expected" }
     }
 }

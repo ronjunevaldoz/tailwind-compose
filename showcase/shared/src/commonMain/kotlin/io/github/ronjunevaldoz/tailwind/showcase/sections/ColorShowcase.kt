@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
+import androidx.compose.foundation.style.Style
+import androidx.compose.foundation.style.styleable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -11,6 +14,7 @@ import io.github.ronjunevaldoz.tailwind.core.TwColors
 import io.github.ronjunevaldoz.tailwind.modifiers.bg
 import io.github.ronjunevaldoz.tailwind.modifiers.gap1
 import io.github.ronjunevaldoz.tailwind.modifiers.gap4
+import io.github.ronjunevaldoz.tailwind.style.bgStyle
 
 private const val HUES_PER_ROW = 9
 
@@ -63,6 +67,7 @@ private val everyHueAt500 =
  * Two views into the palette: a full-scale ramp for one hue (shows the OKLCH-based
  * perceptual progression from 50 to 950), and one swatch per hue at 500 (shows breadth).
  */
+@OptIn(ExperimentalFoundationStyleApi::class)
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun ColorShowcase() {
@@ -75,6 +80,18 @@ fun ColorShowcase() {
                 blueRamp.forEach { color -> Box(Modifier.size(24.dp).bg(color)) }
             }
             """.trimIndent(),
+        styleCode =
+            """
+            // tailwind-style -- bgStyle(), the Style API's own background() property.
+            Row(horizontalArrangement = gap1()) {
+                blueRamp.forEach { color -> Box(Modifier.size(24.dp).styleable(style = Style.bgStyle(color))) }
+            }
+            """.trimIndent(),
+        styleContent = {
+            Row(horizontalArrangement = gap1()) {
+                blueRamp.forEach { color -> Box(Modifier.size(24.dp).styleable(style = Style.bgStyle(color))) }
+            }
+        },
     ) {
         Row(horizontalArrangement = gap1()) {
             blueRamp.forEach { color -> Box(Modifier.size(24.dp).bg(color)) }

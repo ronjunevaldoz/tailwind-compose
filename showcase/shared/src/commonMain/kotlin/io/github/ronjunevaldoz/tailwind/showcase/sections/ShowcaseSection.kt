@@ -40,11 +40,12 @@ private enum class SectionTabMode { PREVIEW, CODE, STYLE_API }
  * showing the snippet that produced it. Explainer-only categories pass no [code] and get
  * the title + content with no toggle, same as before.
  *
- * [styleCode], when supplied, adds a third "Style API" tab showing the equivalent
- * `tailwind-style-experimental` snippet — code-only, no live preview. That module is
- * deliberately isolated on a different (pre-release) Compose Multiplatform version than
- * this showcase app (see `docs/tailwind-coverage-matrix.md`'s Style API section), so it
- * can't be depended on here to render live the way the Modifier-based [content] can.
+ * [styleContent], when supplied, adds a third "Style API" tab that live-renders the real
+ * `tailwind-style` equivalent (this showcase depends on that module directly -- see its own
+ * build.gradle.kts comment), with [styleCode] shown underneath as the snippet that produced
+ * it. `tailwind-style-experimental` categories that haven't moved to the stable module yet
+ * (still pinned to a pre-release Compose Multiplatform version) should keep passing only
+ * [styleCode] with no [styleContent], which falls back to code-only display.
  */
 @Suppress("ktlint:standard:function-naming")
 @Composable
@@ -53,6 +54,7 @@ fun ShowcaseSection(
     modifier: Modifier = Modifier,
     code: String? = null,
     styleCode: String? = null,
+    styleContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     var mode by remember { mutableStateOf(SectionTabMode.PREVIEW) }
@@ -91,6 +93,13 @@ fun ShowcaseSection(
         Spacer(Modifier.height(12.dp))
         when {
             code != null && mode == SectionTabMode.CODE -> CodeBlock(code)
+            styleCode != null && mode == SectionTabMode.STYLE_API && styleContent != null -> {
+                Column {
+                    styleContent()
+                    Spacer(Modifier.height(12.dp))
+                    CodeBlock(styleCode)
+                }
+            }
             styleCode != null && mode == SectionTabMode.STYLE_API -> CodeBlock(styleCode)
             else -> content()
         }

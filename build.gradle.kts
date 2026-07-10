@@ -68,6 +68,9 @@ val publishedModuleDescriptions =
             "and 3D transform Modifier extensions for Compose Multiplatform.",
         "tailwind-compose" to "Tailwind CSS-inspired utilities for Compose Multiplatform " +
             "(facade module — depends on tailwind-core + tailwind-layout/color/typography/effects).",
+        "tailwind-style" to "Tailwind-style ring, border, shadow, color, opacity, sizing, transform, " +
+            "transition, typography, and z-index utilities built on the real Compose Styles API " +
+            "(androidx.compose.foundation.style), not yet added to a release.yml publish step.",
     )
 
 subprojects {

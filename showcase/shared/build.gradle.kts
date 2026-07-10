@@ -67,6 +67,14 @@ kotlin {
             // Showcase depends on the public facade module, same as any real consumer of
             // this library would.
             api(projects.tailwindCompose)
+            // tailwind-style is not (yet) part of the tailwind-compose facade -- depended on
+            // directly here so the showcase's "Style API" tabs can live-render real Style
+            // values instead of showing a static code string. Safe to do because both this
+            // module and tailwind-style are regular subprojects of the SAME outer build, both
+            // on Compose Multiplatform 1.11.1 -- unlike tailwind-style-experimental (a
+            // separate composite build pinned to 1.12.0-beta01), there's no binary-version
+            // conflict here.
+            implementation(projects.tailwindStyle)
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)

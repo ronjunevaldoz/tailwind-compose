@@ -19,16 +19,9 @@ fun Style.widthStyle4(): Style = widthStyle(TwSpacing.scale4)
 @ExperimentalFoundationStyleApi
 fun Style.heightStyle4(): Style = heightStyle(TwSpacing.scale4)
 
-/** Tailwind's `min-w-*`/`min-h-*` utilities via [androidx.compose.foundation.style.MinSizeScope]. */
-@ExperimentalFoundationStyleApi
-fun Style.minWidthStyle(value: Dp): Style = this.then(Style { minWidth(value) })
-
-@ExperimentalFoundationStyleApi
-fun Style.minHeightStyle(value: Dp): Style = this.then(Style { minHeight(value) })
-
-/** Tailwind's `max-w-*`/`max-h-*` utilities via [androidx.compose.foundation.style.MaxSizeScope]. */
-@ExperimentalFoundationStyleApi
-fun Style.maxWidthStyle(value: Dp): Style = this.then(Style { maxWidth(value) })
-
-@ExperimentalFoundationStyleApi
-fun Style.maxHeightStyle(value: Dp): Style = this.then(Style { maxHeight(value) })
+// min-w-*/min-h-*/max-w-*/max-h-* (MinSizeScope/MaxSizeScope) live in
+// tailwind-style-experimental instead of here: verified via a real test run (not just a
+// compile check) that minWidth(value)/maxWidth(value) compile fine against 1.11.1 but don't
+// actually enforce the constraint -- a 10.dp width with minWidthStyle(40.dp) still measured
+// 10.dp. That's a genuine behavioral gap in 1.11.1's Style API, not a missing-symbol issue,
+// so these stay on 1.12.0-beta01 until 1.11.1 (or whatever stable line ships next) fixes it.

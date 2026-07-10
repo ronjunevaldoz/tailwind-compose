@@ -14,22 +14,11 @@ import androidx.compose.ui.unit.dp
 import org.junit.Rule
 import kotlin.test.Test
 
-/** [SpacingStyle] and [SizingStyle], grouped since both drive measured size. */
+/** [SpacingStyle]. Only the `contentPadding`/`externalPadding` StyleScope properties here need 1.12.0-beta01. */
 @OptIn(ExperimentalFoundationStyleApi::class)
-class LayoutStyleTest {
+class SpacingStyleTest {
     @get:Rule
     val composeTestRule = createComposeRule()
-
-    @Test
-    fun widthStyleAndHeightStyle_setTheMeasuredSizeDirectly() {
-        composeTestRule.setContent {
-            Box(Modifier.testTag("box").styleable(style = Style.widthStyle(50.dp).heightStyle(30.dp)))
-        }
-        composeTestRule
-            .onNodeWithTag("box")
-            .assertWidthIsEqualTo(50.dp)
-            .assertHeightIsEqualTo(30.dp)
-    }
 
     @Test
     fun paddingStyle4_isIncludedInAnExplicitWidthRatherThanAddedOnTopOfIt() {
@@ -41,27 +30,19 @@ class LayoutStyleTest {
         // so the only way to see paddingStyle4's own effect is to confirm it does *not* grow an
         // already-explicit width, not to measure it adding space to an implicit one.
         composeTestRule.setContent {
-            Box(Modifier.testTag("box").styleable(style = Style.widthStyle(40.dp).heightStyle(40.dp).paddingStyle4()))
+            // widthStyle/heightStyle live in :tailwind-style, which this module can't depend
+            // on at runtime -- see build.gradle.kts's comment -- so this sets the explicit
+            // size inline via the same StyleScope.width/height(...) calls those wrap.
+            val fixedSize =
+                Style {
+                    width(40.dp)
+                    height(40.dp)
+                }
+            Box(Modifier.testTag("box").styleable(style = fixedSize.paddingStyle4()))
         }
         composeTestRule
             .onNodeWithTag("box")
             .assertWidthIsEqualTo(40.dp)
             .assertHeightIsEqualTo(40.dp)
-    }
-
-    @Test
-    fun minWidthStyle_enforcesAFloorBelowTheRequestedWidth() {
-        composeTestRule.setContent {
-            Box(Modifier.testTag("box").styleable(style = Style.widthStyle(10.dp).minWidthStyle(40.dp)))
-        }
-        composeTestRule.onNodeWithTag("box").assertWidthIsEqualTo(40.dp)
-    }
-
-    @Test
-    fun maxWidthStyle_enforcesACeilingAboveTheRequestedWidth() {
-        composeTestRule.setContent {
-            Box(Modifier.testTag("box").styleable(style = Style.widthStyle(100.dp).maxWidthStyle(40.dp)))
-        }
-        composeTestRule.onNodeWithTag("box").assertWidthIsEqualTo(40.dp)
     }
 }

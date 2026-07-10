@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
+import androidx.compose.foundation.style.Style
+import androidx.compose.foundation.style.styleable
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,6 +36,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.github.ronjunevaldoz.tailwind.core.TwColors
+import io.github.ronjunevaldoz.tailwind.core.TwDuration
 import io.github.ronjunevaldoz.tailwind.core.TwEasing
 import io.github.ronjunevaldoz.tailwind.core.TwRadius
 import io.github.ronjunevaldoz.tailwind.modifiers.bg
@@ -47,9 +51,11 @@ import io.github.ronjunevaldoz.tailwind.modifiers.roundedFull
 import io.github.ronjunevaldoz.tailwind.modifiers.roundedMd
 import io.github.ronjunevaldoz.tailwind.modifiers.textSm
 import io.github.ronjunevaldoz.tailwind.modifiers.transitionAllDuration300
+import io.github.ronjunevaldoz.tailwind.style.transitionStyle
 import kotlin.math.roundToInt
 
 /** transitionAllDuration300 — tap to animate a size change instead of snapping. */
+@OptIn(ExperimentalFoundationStyleApi::class)
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun TransitionShowcase() {
@@ -66,6 +72,40 @@ fun TransitionShowcase() {
             )
             Button(onClick = { expanded = !expanded }) { Text("Toggle size") }
             """.trimIndent(),
+        styleCode =
+            """
+            // tailwind-style -- transitionStyle(), the Style API's own AnimateStyleScope.animate().
+            var expanded by remember { mutableStateOf(false) }
+            Box(
+                Modifier.styleable(
+                    style =
+                        Style.transitionStyle(durationMs = TwDuration.D300) {
+                            background(TwColors.blue500)
+                            width(if (expanded) 80.dp else 40.dp)
+                            height(if (expanded) 80.dp else 40.dp)
+                        },
+                ),
+            )
+            Button(onClick = { expanded = !expanded }) { Text("Toggle size") }
+            """.trimIndent(),
+        styleContent = {
+            var expanded by remember { mutableStateOf(false) }
+            Column {
+                Box(
+                    Modifier.styleable(
+                        style =
+                            Style.transitionStyle(durationMs = TwDuration.D300) {
+                                background(TwColors.blue500)
+                                width(if (expanded) 80.dp else 40.dp)
+                                height(if (expanded) 80.dp else 40.dp)
+                            },
+                    ),
+                )
+                Button(onClick = { expanded = !expanded }) {
+                    Text("Toggle size")
+                }
+            }
+        },
     ) {
         var expanded by remember { mutableStateOf(false) }
         Box(

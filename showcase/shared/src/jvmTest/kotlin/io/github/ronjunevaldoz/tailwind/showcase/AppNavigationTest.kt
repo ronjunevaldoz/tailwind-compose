@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -69,6 +70,46 @@ class AppNavigationTest {
 
         composeTestRule.onNodeWithText("Preview").performClick()
         composeTestRule.onNode(hasText("bgSlate200", substring = true)).assertDoesNotExist()
+    }
+
+    @Test
+    fun styleApiTab_rendersLiveForEveryCategoryThatMovedToTailwindStyle() {
+        composeTestRule.setContent {
+            App()
+        }
+
+        // Every category whose Style extensions live in the stable :tailwind-style module
+        // (see ShowcaseSection.kt's styleContent param) -- clicking "Style API" actually
+        // invokes that category's live composable, not just its static code string, so this
+        // catches a real runtime crash a compile check alone wouldn't (e.g. a bad Style
+        // combination) -- FiltersShowcase/SpacingShowcase are deliberately excluded, since
+        // those categories' Style extensions still live in tailwind-style-experimental and
+        // have no styleContent.
+        val categories =
+            listOf(
+                "Ring",
+                "Borders",
+                "Shadow",
+                "Color",
+                "Opacity",
+                "Sizing",
+                "2D Transforms",
+                "3D Transforms",
+                "Transitions",
+                "Typography",
+            )
+
+        categories.forEach { sidebarLabel ->
+            composeTestRule
+                .onNodeWithTag(SIDEBAR_LIST_TEST_TAG)
+                .performScrollToNode(hasText(sidebarLabel))
+            composeTestRule.onNodeWithText(sidebarLabel).performClick()
+            composeTestRule.onAllNodesWithText("Style API")[0].performClick()
+            // Color renders two ShowcaseSections (only one has a Style API tab), so there
+            // can be more than one "Preview" tab label on screen -- checking the first is
+            // enough to confirm the click above didn't crash the recomposition.
+            composeTestRule.onAllNodesWithText("Preview")[0].assertIsDisplayed()
+        }
     }
 
     @Test

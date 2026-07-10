@@ -51,7 +51,11 @@ class LayerStyleTest {
     @Test
     fun translateXStyle4_doesNotChangeMeasuredSize() {
         composeTestRule.setContent {
-            Box(Modifier.testTag("box").styleable(style = Style.widthStyle(40.dp).heightStyle(40.dp).translateXStyle4()))
+            Box(
+                Modifier
+                    .testTag("box")
+                    .styleable(style = Style.widthStyle(40.dp).heightStyle(40.dp).translateXStyle4()),
+            )
         }
         composeTestRule
             .onNodeWithTag("box")
