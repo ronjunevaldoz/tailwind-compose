@@ -34,7 +34,20 @@ import androidx.compose.ui.unit.dp
 fun Style.ringStyle(
     color: Color,
     width: Dp = 1.dp,
-): Style = this.then(Style { dropShadow(Shadow(radius = 0.dp, spread = width, color = color)) })
+): Style = this.then(Style { dropShadow(ringShadow(color, width)) })
+
+/**
+ * The raw [Shadow] value [ringStyle] wraps, exposed on its own for callers that need the ring
+ * *inside* a state block (`focused { dropShadow(ringShadow(color, width)) }`) instead of
+ * unconditionally -- [ringStyle] itself always applies, so it can't express "only on focus"
+ * without wrapping call sites in their own `Style { focused { ... } }`, which defeats the point
+ * of a reusable helper. This is that lower-level building block.
+ */
+@ExperimentalFoundationStyleApi
+fun ringShadow(
+    color: Color,
+    width: Dp = 1.dp,
+): Shadow = Shadow(radius = 0.dp, spread = width, color = color)
 
 @ExperimentalFoundationStyleApi
 fun Style.ringStyle0(color: Color): Style = ringStyle(color, 0.dp)
